@@ -62,7 +62,7 @@ exports.verifyOtp = async (req, res) => {
       const hasVoted =
         userCheck.rows.length > 0 && userCheck.rows[0].has_voted === true;
 
-      // 2. Save session data used by your route guard
+      // 2. Set session properties
       req.session.email = cleanEmail;
       req.session.isAuthenticated = !hasVoted;
       req.session.hasVoted = hasVoted;
@@ -75,10 +75,21 @@ exports.verifyOtp = async (req, res) => {
         );
       }
 
-      return res.json({
-        success: true,
-        message: "OTP verified successfully.",
-        redirectUrl: "/votingpage",
+      // 4. Force session write before responding to client redirect
+      return req.session.save((err) => {
+        if (err) {
+          console.error("Session Save Error:", err);
+          return res.status(500).json({
+            success: false,
+            message: "Failed to establish user session. Please try again.",
+          });
+        }
+
+        return res.json({
+          success: true,
+          message: "OTP verified successfully.",
+          redirectUrl: "/votingpage",
+        });
       });
     } else {
       return res.status(400).json({
