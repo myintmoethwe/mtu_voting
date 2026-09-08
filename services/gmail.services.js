@@ -1,23 +1,20 @@
 const db = require("../config/db");
-const Brevo = require("@getbrevo/brevo");
+const { TransactionalEmailsApi, SendSmtpEmail } = require("@getbrevo/brevo");
 
-// Initialize Brevo API Client
-const apiInstance = new Brevo.TransactionalEmailsApi();
-apiInstance.setApiKey(
-  Brevo.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY,
-);
+// Initialize Brevo API Client (v2+ Syntax)
+const apiInstance = new TransactionalEmailsApi();
+apiInstance.setApiKey(0, process.env.BREVO_API_KEY);
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
 // ======================================
-// SEND OTP (BREVO HTTP API)
+// 1. SEND OTP (BREVO HTTP API)
 // ======================================
 exports.sendOtpService = async (email) => {
   const cleanEmail = email.trim().toLowerCase();
 
-  // 1. Check if user already voted
+  // 1. Check if user has already voted
   const existingUser = await db.query(
     "SELECT * FROM voted_users WHERE LOWER(email) = $1",
     [cleanEmail],
@@ -30,7 +27,7 @@ exports.sendOtpService = async (email) => {
     }
   }
 
-  // 2. Check active unexpired OTP
+  // 2. Check active unexpired OTP to prevent spam
   const activeOtp = await db.query(
     `SELECT expires_at FROM otp_codes 
      WHERE LOWER(email) = $1 AND expires_at > NOW()`,
@@ -43,7 +40,7 @@ exports.sendOtpService = async (email) => {
     );
   }
 
-  // 3. Generate & Save OTP
+  // 3. Generate & Save OTP (5 minutes expiration)
   const otp = generateOTP();
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
@@ -53,34 +50,35 @@ exports.sendOtpService = async (email) => {
     [cleanEmail, otp, expiresAt],
   );
 
-  // 4. Send Email via Brevo API
-  const sendSmtpEmail = new Brevo.SendSmtpEmail();
+  // 4. Construct Email via Brevo SendSmtpEmail Payload
+  const sendSmtpEmail = new SendSmtpEmail();
   sendSmtpEmail.subject = "MTU Voting System Verification Code";
   sendSmtpEmail.htmlContent = `
-    <div style="font-family: sans-serif; padding: 20px;">
-      <h2>MTU Voting Verification</h2>
-      <p>Your Verification Code is: <b style="font-size: 24px; color: #0066ff;">${otp}</b></p>
+    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+      <h2 style="color: #0066ff;">MTU Voting System</h2>
+      <p>Your OTP verification code is:</p>
+      <h1 style="font-size: 32px; letter-spacing: 5px; color: #111;">${otp}</h1>
       <p>This code will expire in 5 minutes.</p>
     </div>
   `;
   sendSmtpEmail.sender = {
-    name: "CodeaSquad Voting",
+    name: "MTU Voting System",
     email: process.env.SENDER_EMAIL,
   };
   sendSmtpEmail.to = [{ email: cleanEmail }];
 
   try {
     await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("OTP sent successfully via Brevo!");
+    console.log(`OTP sent successfully to ${cleanEmail} via Brevo.`);
     return "OTP code sent successfully to your email.";
   } catch (error) {
-    console.error("Brevo API Error:", error);
+    console.error("Brevo API Execution Error:", error);
     throw new Error("Failed to send verification email. Please try again.");
   }
 };
 
 // ======================================
-// VERIFY OTP
+// 2. VERIFY OTP
 // ======================================
 exports.verifyOtpService = async (email, otp) => {
   const cleanEmail = email.trim().toLowerCase();
@@ -121,7 +119,7 @@ exports.verifyOtpService = async (email, otp) => {
 };
 
 // ======================================
-// SUBMIT VOTE
+// 3. SUBMIT VOTE (RACE CONDITION PROTECTED)
 // ======================================
 exports.submitVote = async ({
   email,
@@ -142,6 +140,7 @@ exports.submitVote = async ({
   try {
     await client.query("BEGIN");
 
+    // Lock the record for strict voting validation
     const existingVote = await client.query(
       `SELECT id, has_voted 
        FROM voted_users 
@@ -234,7 +233,7 @@ exports.submitVote = async ({
 };
 
 // ======================================
-// GET ALL PARTICIPANTS
+// 4. GET ALL PARTICIPANTS
 // ======================================
 exports.getAllParticipants = async () => {
   const query = `
