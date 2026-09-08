@@ -1,14 +1,20 @@
 const db = require("../config/db");
 const { Resend } = require("resend");
 
-// Initialize Resend HTTP API client (Bypasses Render SMTP port restrictions)
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend dynamically to prevent boot crashes if env var is missing
+const getResend = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing RESEND_API_KEY in environment variables.");
+  }
+  return new Resend(apiKey);
+};
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
 // ======================================
-// SEND OTP
+// SEND OTP (PREVENT DUPLICATES & DOUBLE VOTING)
 // ======================================
 exports.sendOtpService = async (email) => {
   const cleanEmail = email.trim().toLowerCase();
@@ -18,8 +24,8 @@ exports.sendOtpService = async (email) => {
     "SELECT * FROM voted_users WHERE LOWER(email) = $1",
     [cleanEmail],
   );
-  console.log("2. DB check complete.");
 
+  // Block OTP request if user has already voted
   if (existingUser.rows.length > 0) {
     const userRecord = existingUser.rows[0];
     if (userRecord.has_voted === true || userRecord.king_id !== null) {
@@ -27,13 +33,25 @@ exports.sendOtpService = async (email) => {
     }
   }
 
+  // Block sending a new code if an active, unexpired OTP already exists
+  console.log("2. Checking for active unexpired OTP...");
+  const activeOtp = await db.query(
+    `SELECT expires_at FROM otp_codes 
+     WHERE LOWER(email) = $1 AND expires_at > NOW()`,
+    [cleanEmail],
+  );
+
+  if (activeOtp.rows.length > 0) {
+    throw new Error(
+      "An OTP code has already been sent to this email. Please check your inbox or wait for it to expire.",
+    );
+  }
+
   // Generate OTP
   const otp = generateOTP();
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
 
-  // OTP expires after 5 minutes
-  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
-  console.log("3. Clearing and saving OTP to DB...");
+  console.log("3. Clearing expired OTPs and saving new OTP to DB...");
   await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [cleanEmail]);
 
   await db.query(
@@ -41,11 +59,12 @@ exports.sendOtpService = async (email) => {
      VALUES ($1, $2, $3)`,
     [cleanEmail, otp, expiresAt],
   );
-  console.log("4. OTP saved. Triggering Resend API...");
 
-  // Send OTP email via HTTP API
-  const { data, error } = await resend.emails.send({
-    from: "CodeaSquad Voting System <onboarding@resend.dev>", // Replace with your domain once verified on Resend
+  console.log("4. Triggering Resend API...");
+  const resend = getResend();
+
+  const { error } = await resend.emails.send({
+    from: "CodeaSquad Voting System <onboarding@resend.dev>",
     to: [cleanEmail],
     subject: "Voting Verification Code",
     html: `
