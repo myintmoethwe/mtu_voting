@@ -1,34 +1,34 @@
 const db = require("../config/db");
 const nodemailer = require("nodemailer");
 
+// Transporter configured with family: 4 to force IPv4 and prevent ENETUNREACH errors
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // use SSL
+  port: 587, // Port 587 with STARTTLS avoids network routing issues
+  secure: false, // Set to false for 587
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    pass: process.env.EMAIL_PASS,
   },
-  tls: {
-    rejectUnauthorized: false
-  },
+  family: 4, // Force IPv4 resolution
   connectionTimeout: 10000,
   greetingTimeout: 10000,
-  socketTimeout: 10000
+  socketTimeout: 10000,
 });
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
-
 // ======================================
 // SEND OTP
 // ======================================
 exports.sendOtpService = async (email) => {
+  const cleanEmail = email.trim().toLowerCase();
+
   console.log("1. Checking existing user in DB...");
   const existingUser = await db.query(
-    "SELECT * FROM voted_users WHERE LOWER(email) = LOWER($1)",
-    [email.trim()]
+    "SELECT * FROM voted_users WHERE LOWER(email) = $1",
+    [cleanEmail],
   );
   console.log("2. DB check complete.");
 
@@ -43,32 +43,27 @@ exports.sendOtpService = async (email) => {
   const otp = generateOTP();
 
   // OTP expires after 5 minutes
-  const expiresAt = new Date(
-    Date.now() + 5 * 60 * 1000
-  );
-  
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
   console.log("3. Clearing and saving OTP to DB...");
-  // Clear out any old active OTP and save the new one instantly
-  await db.query("DELETE FROM otp_codes WHERE email = $1", [email]);
+  await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [cleanEmail]);
 
   await db.query(
-    `INSERT INTO otp_codes
-    (email, otp, expires_at)
-    VALUES ($1, $2, $3)`,
-    [email, otp, expiresAt]
+    `INSERT INTO otp_codes (email, otp, expires_at)
+     VALUES ($1, $2, $3)`,
+    [cleanEmail, otp, expiresAt],
   );
   console.log("4. OTP saved. Triggering Nodemailer sendMail...");
 
   // Send OTP email
   await transporter.sendMail({
-    from: '"CodeaSquad Voting System" <' + process.env.EMAIL_USER + '>',
-    to: email,
+    from: `"CodeaSquad Voting System" <${process.env.EMAIL_USER}>`,
+    to: cleanEmail,
     subject: "Voting Verification Code",
     html: `
       <h3>Your OTP Code is <b>${otp}</b></h3>
       <p>This code will expire in 5 minutes.</p>
-    `
+    `,
   });
 
   console.log("5. Email sent successfully!");
@@ -79,24 +74,26 @@ exports.sendOtpService = async (email) => {
 // VERIFY OTP
 // ======================================
 exports.verifyOtpService = async (email, otp) => {
-  const trimmedEmail = email.trim();
+  const cleanEmail = email.trim().toLowerCase();
   const trimmedOtp = String(otp).trim();
 
-  // 1. Check if email exists in otp_codes at all
+  // 1. Check if email exists in otp_codes
   const emailCheck = await db.query(
-    `SELECT * FROM otp_codes WHERE LOWER(email) = LOWER($1)`,
-    [trimmedEmail]
+    `SELECT * FROM otp_codes WHERE LOWER(email) = $1`,
+    [cleanEmail],
   );
 
   if (emailCheck.rows.length === 0) {
-    throw new Error("No active OTP request found for this email. Please request a new code.");
+    throw new Error(
+      "No active OTP request found for this email. Please request a new code.",
+    );
   }
 
   // 2. Check if the specific OTP matches
   const result = await db.query(
     `SELECT * FROM otp_codes 
-     WHERE LOWER(email) = LOWER($1) AND TRIM(otp) = TRIM($2)`,
-    [trimmedEmail, trimmedOtp]
+     WHERE LOWER(email) = $1 AND TRIM(otp) = $2`,
+    [cleanEmail, trimmedOtp],
   );
 
   if (result.rows.length === 0) {
@@ -107,17 +104,20 @@ exports.verifyOtpService = async (email, otp) => {
 
   // 3. Check expiration
   if (new Date() > new Date(record.expires_at)) {
-    await db.query("DELETE FROM otp_codes WHERE email = $1", [trimmedEmail]);
+    await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [
+      cleanEmail,
+    ]);
     throw new Error("OTP code has expired. Please request a new one.");
   }
 
   // Clean up code after successful verification
-  await db.query("DELETE FROM otp_codes WHERE email = $1", [trimmedEmail]);
+  await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [cleanEmail]);
 
   return true;
 };
+
 // ======================================
-// SUBMIT VOTE (TRANSACTION SAFE)
+// SUBMIT VOTE (TRANSACTION & RACE SAFE)
 // ======================================
 exports.submitVote = async ({
   email,
@@ -126,102 +126,66 @@ exports.submitVote = async ({
   mrSmartId,
   msStyleId,
   mrPopularId,
-  msPopularId
+  msPopularId,
 }) => {
-
   if (!email) {
     throw new Error("Email is required.");
   }
 
+  const cleanEmail = email.trim().toLowerCase();
   const client = await db.connect();
-  try {
-    await client.query('BEGIN');
 
+  try {
+    await client.query("BEGIN");
+
+    // Lock the user record row to block concurrent double-voting attempts
     const existingVote = await client.query(
       `SELECT id, has_voted 
        FROM voted_users 
-       WHERE email = $1`,
-      [email]
+       WHERE LOWER(email) = $1 FOR UPDATE`,
+      [cleanEmail],
     );
 
     if (existingVote.rows.length > 0) {
       const user = existingVote.rows[0];
       if (user.has_voted) {
-        await client.query('ROLLBACK');
+        await client.query("ROLLBACK");
         return {
           success: false,
-          message: "You have already voted. Multiple submissions are not allowed."
+          message:
+            "You have already voted. Multiple submissions are not allowed.",
         };
       }
     } else {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       return {
         success: false,
-        message: "Unauthorized vote attempt. Please verify via OTP first."
+        message: "Unauthorized vote attempt. Please verify via OTP first.",
       };
     }
 
-    // KING
-    if (kingId) {
-      await client.query(
-        `UPDATE participants
-         SET "kingVotes" = "kingVotes" + 1
-         WHERE id = $1`,
-        [kingId]
-      );
+    // Category vote increments
+    const voteCategories = [
+      { id: kingId, field: "kingVotes" },
+      { id: queenId, field: "queenVotes" },
+      { id: mrSmartId, field: "smartVotes" },
+      { id: msStyleId, field: "styleVotes" },
+      { id: mrPopularId, field: "boyPopularVotes" },
+      { id: msPopularId, field: "girlPopularVotes" },
+    ];
+
+    for (const item of voteCategories) {
+      if (item.id) {
+        await client.query(
+          `UPDATE participants
+           SET "${item.field}" = "${item.field}" + 1
+           WHERE id = $1`,
+          [item.id],
+        );
+      }
     }
 
-    // QUEEN
-    if (queenId) {
-      await client.query(
-        `UPDATE participants
-         SET "queenVotes" = "queenVotes" + 1
-         WHERE id = $1`,
-        [queenId]
-      );
-    }
-
-    // MR SMART
-    if (mrSmartId) {
-      await client.query(
-        `UPDATE participants
-         SET "smartVotes" = "smartVotes" + 1
-         WHERE id = $1`,
-        [mrSmartId]
-      );
-    }
-
-    // MS STYLE
-    if (msStyleId) {
-      await client.query(
-        `UPDATE participants
-         SET "styleVotes" = "styleVotes" + 1
-         WHERE id = $1`,
-        [msStyleId]
-      );
-    }
-
-    // MR POPULAR
-    if (mrPopularId) {
-      await client.query(
-        `UPDATE participants
-         SET "boyPopularVotes" = "boyPopularVotes" + 1
-         WHERE id = $1`,
-        [mrPopularId]
-      );
-    }
-
-    // MS POPULAR
-    if (msPopularId) {
-      await client.query(
-        `UPDATE participants
-         SET "girlPopularVotes" = "girlPopularVotes" + 1
-         WHERE id = $1`,
-        [msPopularId]
-      );
-    }
-
-    // SAVE VOTE IN voted_users (UPDATE OR INSERT)
+    // Save choices and update voter record
     await client.query(
       `INSERT INTO voted_users
       (
@@ -245,30 +209,28 @@ exports.submitVote = async ({
         mr_popular_id = EXCLUDED.mr_popular_id,
         ms_popular_id = EXCLUDED.ms_popular_id`,
       [
-        email,
+        cleanEmail,
         kingId || null,
         queenId || null,
         mrSmartId || null,
         msStyleId || null,
         mrPopularId || null,
-        msPopularId || null
-      ]
+        msPopularId || null,
+      ],
     );
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
     return {
       success: true,
-      message: "Vote submitted successfully."
+      message: "Vote submitted successfully.",
     };
   } catch (err) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw err;
   } finally {
     client.release();
   }
 };
-
-
 
 // ======================================
 // GET ALL PARTICIPANTS
