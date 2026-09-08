@@ -1,300 +1,291 @@
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
-const cors = require("cors");
+// const express = require("express");
+// const fs = require("fs");
+// const path = require("path");
+// const cors = require("cors");
 
-const app = express();
-const PORT = 3000;
+// const app = express();
+// const PORT = 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname, "public")));
 
-const DATA_FILE = path.join(__dirname, "target.json");
+// const DATA_FILE = path.join(__dirname, "target.json");
 
-const DEFAULT_DATA = {
-    targetTime: 0,
-    remaining: 0,
-    duration: 0,
-    status: "reset"
-};
+// const DEFAULT_DATA = {
+//     targetTime: 0,
+//     remaining: 0,
+//     duration: 0,
+//     status: "reset"
+// };
 
-function getData() {
+// function getData() {
 
-    if (!fs.existsSync(DATA_FILE)) {
-        return DEFAULT_DATA;
-    }
+//     if (!fs.existsSync(DATA_FILE)) {
+//         return DEFAULT_DATA;
+//     }
 
-    try {
+//     try {
 
-        const data = JSON.parse(
-            fs.readFileSync(DATA_FILE, "utf8")
-        );
+//         const data = JSON.parse(
+//             fs.readFileSync(DATA_FILE, "utf8")
+//         );
 
-        // Running countdown
-        if (
-            data.status === "running" &&
-            data.targetTime > 0
-        ) {
+//         // Running countdown
+//         if (
+//             data.status === "running" &&
+//             data.targetTime > 0
+//         ) {
 
-            const now = Date.now();
+//             const now = Date.now();
 
-            // Scheduled - not started yet
-            if (now < data.targetTime) {
+//             // Scheduled - not started yet
+//             if (now < data.targetTime) {
 
-                return {
-                    ...data,
-                    remaining: data.duration
-                };
-            }
+//                 return {
+//                     ...data,
+//                     remaining: data.duration
+//                 };
+//             }
+
+//             // Countdown has started
+//             const endTime =
+//                 data.targetTime + data.duration;
+
+//             const remaining =
+//                 endTime - now;
 
-            // Countdown has started
-            const endTime =
-                data.targetTime + data.duration;
+//             // Finished
+//             if (remaining <= 0) {
+
+//                 const finishedData = {
+//                     ...data,
+//                     remaining: 0,
+//                     status: "finished"
+//                 };
 
-            const remaining =
-                endTime - now;
+//                 saveData(finishedData);
 
-            // Finished
-            if (remaining <= 0) {
+//                 return finishedData;
+//             }
 
-                const finishedData = {
-                    ...data,
-                    remaining: 0,
-                    status: "finished"
-                };
+//             return {
+//                 ...data,
+//                 remaining
+//             };
+//         }
 
-                saveData(finishedData);
+//         return data;
 
-                return finishedData;
-            }
+//     } catch (error) {
 
-            return {
-                ...data,
-                remaining
-            };
-        }
+//         console.error(error);
 
-        return data;
+//         return DEFAULT_DATA;
+//     }
+// }
 
-    } catch (error) {
+// function saveData(data) {
 
-        console.error(error);
+//     fs.writeFileSync(
+//         DATA_FILE,
+//         JSON.stringify(data, null, 2)
+//     );
+// }
 
-        return DEFAULT_DATA;
-    }
-}
+// // HOME
+// app.get("/", (req, res) => {
 
+//     res.sendFile(
+//         path.join(__dirname, "views", "home.ejs")
+//     );
+// });
 
-function saveData(data) {
+// // ADMIN
+// app.get("/admin", (req, res) => {
 
-    fs.writeFileSync(
-        DATA_FILE,
-        JSON.stringify(data, null, 2)
-    );
-}
+//     res.sendFile(
+//         path.join(
+//             __dirname,
+//             "public",
+//             "admin_dashboard.html"
+//         )
+//     );
+// });
 
+// // GET COUNTDOWN
+// app.get("/api/countdown", (req, res) => {
 
-// HOME
-app.get("/", (req, res) => {
+//     const data = getData();
 
-    res.sendFile(
-        path.join(__dirname, "views", "home.ejs")
-    );
-});
+//     res.json({
+//         targetTime: data.targetTime || 0,
+//         remaining: data.remaining || 0,
+//         duration: data.duration || 0,
+//         status: data.status || "reset"
+//     });
+// });
 
+// // START / SCHEDULE
+// app.post("/api/admin/update", (req, res) => {
 
-// ADMIN
-app.get("/admin", (req, res) => {
+//     const {
+//         newTarget,
+//         duration
+//     } = req.body;
 
-    res.sendFile(
-        path.join(
-            __dirname,
-            "public",
-            "admin_dashboard.html"
-        )
-    );
-});
+//     const targetTime = Number(newTarget);
+//     const countdownDuration = Number(duration);
 
+//     if (
+//         !targetTime ||
+//         isNaN(targetTime) ||
+//         !countdownDuration ||
+//         isNaN(countdownDuration)
+//     ) {
 
-// GET COUNTDOWN
-app.get("/api/countdown", (req, res) => {
+//         return res.status(400).json({
+//             success: false,
+//             message: "Invalid date, time or duration."
+//         });
+//     }
 
-    const data = getData();
+//     if (targetTime <= Date.now()) {
 
-    res.json({
-        targetTime: data.targetTime || 0,
-        remaining: data.remaining || 0,
-        duration: data.duration || 0,
-        status: data.status || "reset"
-    });
-});
+//         return res.status(400).json({
+//             success: false,
+//             message: "Start date and time must be in the future."
+//         });
+//     }
 
+//     const payload = {
 
-// START / SCHEDULE
-app.post("/api/admin/update", (req, res) => {
+//         targetTime: targetTime,
 
-    const {
-        newTarget,
-        duration
-    } = req.body;
+//         remaining: countdownDuration,
 
-    const targetTime = Number(newTarget);
-    const countdownDuration = Number(duration);
+//         duration: countdownDuration,
 
-    if (
-        !targetTime ||
-        isNaN(targetTime) ||
-        !countdownDuration ||
-        isNaN(countdownDuration)
-    ) {
+//         status: "running"
+//     };
 
-        return res.status(400).json({
-            success: false,
-            message: "Invalid date, time or duration."
-        });
-    }
+//     saveData(payload);
 
-    if (targetTime <= Date.now()) {
+//     res.json({
+//         success: true,
+//         ...payload
+//     });
+// });
 
-        return res.status(400).json({
-            success: false,
-            message: "Start date and time must be in the future."
-        });
-    }
+// // PAUSE
+// app.post("/api/admin/pause", (req, res) => {
 
-    const payload = {
+//     const data = getData();
 
-        targetTime: targetTime,
+//     if (data.status !== "running") {
 
-        remaining: countdownDuration,
+//         return res.json({
+//             success: false,
+//             message: "Countdown is not running."
+//         });
+//     }
 
-        duration: countdownDuration,
+//     const now = Date.now();
 
-        status: "running"
-    };
+//     let remaining = data.duration;
 
-    saveData(payload);
+//     if (now >= data.targetTime) {
 
-    res.json({
-        success: true,
-        ...payload
-    });
-});
+//         remaining = Math.max(
+//             0,
+//             data.targetTime +
+//             data.duration -
+//             now
+//         );
+//     }
 
+//     const payload = {
 
-// PAUSE
-app.post("/api/admin/pause", (req, res) => {
+//         targetTime: data.targetTime,
 
-    const data = getData();
+//         remaining: remaining,
 
-    if (data.status !== "running") {
+//         duration: data.duration,
 
-        return res.json({
-            success: false,
-            message: "Countdown is not running."
-        });
-    }
+//         status: "paused"
+//     };
 
-    const now = Date.now();
+//     saveData(payload);
 
-    let remaining = data.duration;
+//     res.json({
+//         success: true,
+//         remaining,
+//         status: "paused"
+//     });
+// });
 
-    if (now >= data.targetTime) {
+// // RESUME
+// app.post("/api/admin/resume", (req, res) => {
 
-        remaining = Math.max(
-            0,
-            data.targetTime +
-            data.duration -
-            now
-        );
-    }
+//     const data = getData();
 
-    const payload = {
+//     if (data.status !== "paused") {
 
-        targetTime: data.targetTime,
+//         return res.json({
+//             success: false,
+//             message: "Countdown is not paused."
+//         });
+//     }
 
-        remaining: remaining,
+//     const remaining =
+//         Number(data.remaining || 0);
 
-        duration: data.duration,
+//     if (remaining <= 0) {
 
-        status: "paused"
-    };
+//         return res.json({
+//             success: false,
+//             message: "Countdown has finished."
+//         });
+//     }
 
-    saveData(payload);
+//     const targetTime =
+//         Date.now() + remaining;
 
-    res.json({
-        success: true,
-        remaining,
-        status: "paused"
-    });
-});
+//     const payload = {
 
+//         targetTime,
 
-// RESUME
-app.post("/api/admin/resume", (req, res) => {
+//         remaining,
 
-    const data = getData();
+//         duration: data.duration || remaining,
 
-    if (data.status !== "paused") {
+//         status: "running"
+//     };
 
-        return res.json({
-            success: false,
-            message: "Countdown is not paused."
-        });
-    }
+//     saveData(payload);
 
-    const remaining =
-        Number(data.remaining || 0);
+//     res.json({
+//         success: true,
+//         targetTime,
+//         remaining,
+//         status: "running"
+//     });
+// });
 
-    if (remaining <= 0) {
+// // RESET
+// app.post("/api/admin/reset", (req, res) => {
 
-        return res.json({
-            success: false,
-            message: "Countdown has finished."
-        });
-    }
+//     saveData(DEFAULT_DATA);
 
-    const targetTime =
-        Date.now() + remaining;
+//     res.json({
+//         success: true,
+//         ...DEFAULT_DATA
+//     });
+// });
 
-    const payload = {
+// app.listen(PORT, () => {
 
-        targetTime,
-
-        remaining,
-
-        duration: data.duration || remaining,
-
-        status: "running"
-    };
-
-    saveData(payload);
-
-    res.json({
-        success: true,
-        targetTime,
-        remaining,
-        status: "running"
-    });
-});
-
-
-// RESET
-app.post("/api/admin/reset", (req, res) => {
-
-    saveData(DEFAULT_DATA);
-
-    res.json({
-        success: true,
-        ...DEFAULT_DATA
-    });
-});
-
-
-app.listen(PORT, () => {
-
-    console.log(
-        `Countdown server running at http://localhost:${PORT}`
-    );
-});
+//     console.log(
+//         `Countdown server running at http://localhost:${PORT}`
+//     );
+// });
