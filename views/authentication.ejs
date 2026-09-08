@@ -635,9 +635,11 @@
 
       async function openViewBallot(email) {
         const btn = document.getElementById("viewBallotBtn");
-        btn.disabled = true;
-        btn.innerHTML =
-          '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Loading ballot...';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Loading ballot...';
+        }
 
         try {
           const res = await fetch("/api/view-ballot-session", {
@@ -646,31 +648,32 @@
             body: JSON.stringify({ email: email }),
           });
 
-          // Safely check HTTP response status before parsing JSON
-          if (!res.ok) {
-            const errorText = await res.text();
-            let errorMessage = "Unable to open ballot session.";
-            try {
-              const errorJson = JSON.parse(errorText);
-              errorMessage = errorJson.message || errorMessage;
-            } catch (e) {
-              // Response wasn't JSON (e.g. 500 HTML error page)
-            }
-            throw new Error(errorMessage);
+          const contentType = res.headers.get("content-type");
+
+          // Check if the server returned HTML (error page / 404 / 500)
+          if (!contentType || !contentType.includes("application/json")) {
+            throw new Error(
+              `Server returned status ${res.status} (non-JSON response). Check backend route configuration.`,
+            );
           }
 
           const data = await res.json();
 
-          if (data.success && data.redirectUrl) {
+          if (res.ok && data.success && data.redirectUrl) {
             window.location.href = data.redirectUrl;
           } else {
             alert(data.message || "Unable to open ballot session.");
-            btn.disabled = false;
-            btn.innerHTML = '<i class="ri-eye-line"></i> View Ballot';
+            resetButton(btn);
           }
         } catch (err) {
-          console.error("View Ballot Error:", err);
+          console.error("View Ballot Fetch Error:", err);
           alert(err.message || "A network error occurred. Please try again.");
+          resetButton(btn);
+        }
+      }
+
+      function resetButton(btn) {
+        if (btn) {
           btn.disabled = false;
           btn.innerHTML = '<i class="ri-eye-line"></i> View Ballot';
         }
