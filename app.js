@@ -43,25 +43,36 @@ app.use("/qr_codes", express.static(path.join(__dirname, "qr_codes")));
 app.use("/uploads", express.static(path.join(__dirname, "middleware/uploads")));
 
 // Session Configuration
+const express = require("express");
+const session = require("express-session");
+const cors = require("cors");
+
+// 1. CRITICAL: Must be at the very top before session setup on Render
+app.set("trust proxy", 1);
+
+// 2. CORS setup (If frontend and backend are separate or using credentials)
 app.use(
-  session({
-    store: new pgSession({
-      pool: pool,
-      tableName: "session",
-      createTableIfMissing: true, // Creates session table automatically
-    }),
-    secret: process.env.SESSION_SECRET || "fallback_secret_key",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-    },
+  cors({
+    origin: process.env.FRONTEND_URL || true, // Allow your domain
+    credentials: true, // Crucial for passing cookies
   }),
 );
 
+// 3. Robust Session Middleware Configuration
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecretkey",
+    resave: true, // Forces session to saved back to session store
+    saveUninitialized: false, // Don't save empty sessions
+    proxy: true, // Tells express-session to trust Render's reverse proxy
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // True on HTTPS
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax", // Change "none" to "lax"
+      httpOnly: true, // Prevents client-side JS from stealing the cookie
+      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    },
+  }),
+);
 app.use("/", routes);
 
 // Start the HTTP server on Render's assigned port
