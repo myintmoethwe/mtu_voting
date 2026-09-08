@@ -64,7 +64,6 @@
         background-size: 24px 24px;
       }
 
-      /* Single Unified Card */
       .auth-container {
         background: var(--card-bg);
         width: 100%;
@@ -91,7 +90,6 @@
         }
       }
 
-      /* Logo styles */
       .logo-container {
         margin: 0 auto 18px;
         display: inline-flex;
@@ -467,14 +465,14 @@
 
       <div id="otpSection">
         <div class="form-group">
-          <label for="otp">One-Time Password</label>
+          <label for="otpInput">One-Time Password</label>
           <div class="input-wrapper">
             <span class="input-icon">
               <i class="ri-lock-password-line"></i>
             </span>
             <input
               type="text"
-              id="otp"
+              id="otpInput"
               placeholder="Enter 6-digit code"
               maxlength="6"
               autocomplete="one-time-code"
@@ -528,6 +526,13 @@
         document.getElementById("cardSubtitle").innerText =
           `Sent code to ${userEmail}`;
         showMessage("Verification code sent to your email.", "info");
+
+        // Focus directly on the OTP input field
+        const otpInput = document.getElementById("otpInput");
+        if (otpInput) {
+          otpInput.value = "";
+          setTimeout(() => otpInput.focus(), 100);
+        }
       }
 
       function resetForm() {
@@ -543,8 +548,11 @@
         if (votedBox) votedBox.style.display = "none";
 
         resetRequestBtn();
-        document.getElementById("emailInput").value = "";
-        document.getElementById("otp").value = "";
+        const emailInput = document.getElementById("emailInput");
+        if (emailInput) {
+          emailInput.value = "";
+          emailInput.focus();
+        }
       }
 
       function resetRequestBtn() {
@@ -675,10 +683,11 @@
       }
 
       async function verifyOTP() {
-        const otpInput = document.getElementById("otp").value.trim();
+        const otpInput = document.getElementById("otpInput");
+        const otpVal = otpInput ? otpInput.value.trim() : "";
         const verifyBtn = document.getElementById("verifyBtn");
 
-        if (!otpInput) {
+        if (!otpVal) {
           showMessage("Please enter the 6-digit verification code.", "warning");
           return;
         }
@@ -692,7 +701,7 @@
           const res = await fetch("/api/verify-otp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: userEmail, otp: otpInput }),
+            body: JSON.stringify({ email: userEmail, otp: otpVal }),
           });
           const data = await res.json();
 
