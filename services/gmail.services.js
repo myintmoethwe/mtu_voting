@@ -3,8 +3,10 @@ const Brevo = require("@getbrevo/brevo");
 
 // Initialize Brevo API Client
 const apiInstance = new Brevo.TransactionalEmailsApi();
-const apiKey = apiInstance.authentications["apiKey"];
-apiKey.apiKey = process.env.BREVO_API_KEY;
+apiInstance.setApiKey(
+  Brevo.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY,
+);
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
