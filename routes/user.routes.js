@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     const countdown = await getCountdownSettings();
 
     // Dynamically build target URL based on request host
-    const targetUrl = `${req.protocol}://${req.get("host")}/home`;
+    const targetUrl = `${req.protocol}://${req.get("host")}/index`;
 
     const qrDataUrl = await QRCode.toDataURL(targetUrl, {
       width: 250,
