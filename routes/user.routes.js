@@ -20,7 +20,7 @@ function getLocalIp() {
 router.get("/", async (req, res) => {
   try {
     const countdownResult = await pool.query(
-      "SELECT target_time, duration, countdown_status FROM public.settings ORDER BY id DESC LIMIT 1",
+      "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
     );
     const countdown =
       countdownResult.rows.length > 0
@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
 
     const ip = getLocalIp();
     const PORT = process.env.PORT || 3000;
-    const targetUrl = `https://mtu-voting-1.onrender.com/`;
+    const targetUrl = `https://mtu-voting-1.onrender.com/index`;
 
     const qrDataUrl = await QRCode.toDataURL(targetUrl, {
       width: 250,
