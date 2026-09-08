@@ -1,0 +1,242 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+
+  background: #fff7fa;
+
+  color: #333;
+}
+
+/* HEADER */
+
+header {
+  text-align: center;
+
+  padding: 40px 20px;
+
+  background: linear-gradient(135deg, #8f2857, #c34d7c);
+
+  color: white;
+}
+
+header h1 {
+  font-size: 32px;
+
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 16px;
+
+  opacity: 0.9;
+}
+
+/* MAIN */
+
+main {
+  width: 90%;
+
+  max-width: 1200px;
+
+  margin: 40px auto;
+}
+
+/* SECTION */
+
+.voting-section {
+  margin-bottom: 55px;
+}
+
+.voting-section h2 {
+  text-align: center;
+
+  color: #8f2857;
+
+  font-size: 27px;
+
+  margin-bottom: 8px;
+}
+
+.instruction {
+  text-align: center;
+
+  color: #888;
+
+  margin-bottom: 25px;
+}
+
+/* CANDIDATES */
+
+.candidate-container {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 25px;
+}
+
+.candidate {
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  border: 2px solid transparent;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+  transition: 0.3s;
+}
+
+.candidate:hover {
+  transform: translateY(-5px);
+
+  border-color: #e4a4bb;
+}
+
+/* IMAGE */
+
+.candidate img {
+  width: 170px;
+
+  height: 170px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  border: 5px solid #f5dce5;
+
+  margin-bottom: 15px;
+}
+
+.candidate h3 {
+  color: #8f2857;
+
+  font-size: 18px;
+
+  margin-bottom: 6px;
+}
+
+.candidate p {
+  color: #777;
+
+  margin-bottom: 18px;
+}
+
+/* SELECT BUTTON */
+
+.select-btn {
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  border: 2px solid #a52f63;
+
+  background: white;
+
+  color: #a52f63;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.select-btn:hover {
+  background: #fceaf1;
+}
+
+/* SELECTED */
+
+.select-btn.selected {
+  background: #a52f63;
+
+  color: white;
+
+  border-color: #a52f63;
+}
+
+/* SUBMIT */
+
+.submit-area {
+  text-align: center;
+
+  margin: 30px 0 60px;
+}
+
+.submit-btn {
+  width: 300px;
+
+  padding: 16px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #8f2857;
+
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #6f1d43;
+
+  transform: translateY(-2px);
+}
+
+#error-message {
+  color: #d33;
+
+  margin-bottom: 15px;
+
+  font-size: 14px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+  .candidate-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  header h1 {
+    font-size: 25px;
+  }
+
+  .candidate-container {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}

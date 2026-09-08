@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Submitted</title>
+    <link rel="stylesheet" href="../public/style/votelink.css">
+    <link rel="shortcut icon" href="/image/mtulogo.png" type="image/x-icon">
+
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <style>
+        * {  
+            font-family: "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {  
+            background: #f8f7ff;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 35px 25px;
+            margin: 20px 0;
+            box-shadow: 0 12px 30px rgba(0, 32, 96, 0.12);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* =========================
+           SUCCESS ICON ANIMATION (TRUE STARTING LOOP)
+        ========================= */
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 34px;
+            box-shadow: 0 4px 12px rgba(0, 32, 96, 0.08);
+            animation: bounceInLoop 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+        }
+
+        .success-icon i {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleCheckLoop 2s ease-in-out infinite;
+        }
+
+        @keyframes bounceInLoop {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            35% {
+                transform: scale(1.12);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleCheckLoop {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            35% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .message {
+            font-size: 15px;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+
+        .message strong {
+            color: #0056b3;
+        }
+
+        .sub-message {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           VOTE GRID & CARDS (2 Columns Always, 400px Max Width)
+        ========================= */
+
+        .vote-info {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+            width: 100%;
+            justify-content: center;
+            justify-items: center;
+        }
+
+        .vote-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 17px;
+            box-shadow: 0 6px 16px rgba(0, 32, 96, 0.08);
+            border: 2px solid #c4deff;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .vote-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 32, 96, 0.12);
+        }
+
+        .vote-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 32, 96, 0.15);
+        }
+
+        .vote-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+            width: 100%;
+            text-align: left;
+        }
+
+        .vote-details span {
+            color: #1e40af;
+            font-weight: 600;
+            font-size: 0.75rem;
+            background: #dbeafe;
+            padding: 3px 10px;
+            border-radius: 20px;
+            width: max-content;
+            margin-bottom: 2px;
+        }
+
+        .vote-details strong {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .vote-details p {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .submit-area {
+            text-align: center;
+            width: 100%;
+        }
+
+        .back-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #0066ff;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           RESPONSIVE PH SIZES
+        ========================= */
+
+        @media (min-width: 300px) and (max-width: 492px) {
+            body {
+                padding: 15px 10px;
+            }
+            .container {
+                padding: 20px 12px;
+                margin: 15px 0;
+                border-radius: 16px;
+            }
+            .vote-info {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+            .vote-card {
+                padding: 17px;
+                gap: 10px;
+                max-width: 400px;
+            }
+            .vote-card img {
+                width: 50px;
+                height: 50px;
+            }
+            .vote-details span {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+            }
+            .vote-details strong {
+                font-size: 12px;
+            }
+            .vote-details p {
+                font-size: 10px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .sub-message {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="success-icon">
+            <i class="fi fi-rs-badge-check"></i>
+        </div>
+
+        <h1>Vote Successfully Submitted!</h1>
+
+        <p class="message">
+            Thank you for participating in the <strong>King & Queen Selection</strong>.
+        </p>
+        <p class="sub-message">
+            Here is a summary of your chosen candidates:
+        </p>
+
+        <!-- VOTED CANDIDATES GRID -->
+        <div class="vote-info">
+
+            <!-- ROW 1: KING -->
+            <div class="vote-card">
+                <img id="king-img" src="" alt="King Candidate">
+                <div class="vote-details">
+                    <span>King</span>
+                    <strong id="king-name"></strong>
+                    <p id="king-id"></p>
+                </div>
+            </div>
+
+            <!-- ROW 1: QUEEN -->
+            <div class="vote-card">
+                <img id="queen-img" src="" alt="Queen Candidate">
+                <div class="vote-details">
+                    <span>Queen</span>
+                    <strong id="queen-name"></strong>
+                    <p id="queen-id"></p>
+                </div>
+            </div>
+
+            <!-- ROW 2: SMART -->
+            <div class="vote-card">
+                <img id="smart-img" src="" alt="Smart Candidate">
+                <div class="vote-details">
+                    <span>Smart</span>
+                    <strong id="smart-name"></strong>
+                    <p id="smart-id"></p>
+                </div>
+            </div>
+
+            <!-- ROW 2: STYLE -->
+            <div class="vote-card">
+                <img id="style-img" src="" alt="Style Candidate">
+                <div class="vote-details">
+                    <span>Style</span>
+                    <strong id="style-name"></strong>
+                    <p id="style-id"></p>
+                </div>
+            </div>
+
+            <!-- ROW 3: MR. POPULAR -->
+            <div class="vote-card">
+                <img id="b-popular-img" src="" alt="Mr. Popular">
+                <div class="vote-details">
+                    <span>Mr. Popular</span>
+                    <strong id="b-popular-name"></strong>
+                    <p id="b-popular-id"></p>
+                </div>
+            </div>
+
+            <!-- ROW 3: MS. POPULAR -->
+            <div class="vote-card">
+                <img id="g-popular-img" src="" alt="Ms. Popular">
+                <div class="vote-details">
+                    <span>Ms. Popular</span>
+                    <strong id="g-popular-name"></strong>
+                    <p id="g-popular-id"></p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="submit-area">
+            <button class="back-btn" onclick="window.location.href='/votingpage'">
+                Back to Voting Page
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function loadVoteData(prefix, storageKey) {
+            document.getElementById(prefix + "-id").innerText = localStorage.getItem(storageKey + "Id") || "-";
+            document.getElementById(prefix + "-name").innerText = localStorage.getItem(storageKey + "Name") || "-";
+            
+            const imgElement = document.getElementById(prefix + "-img");
+            const imgSource = localStorage.getItem(storageKey + "Img");
+            if (imgElement) {
+                imgElement.src = imgSource || "img/Q01.jpg";
+            }
+        }
+
+        loadVoteData("king", "king");
+        loadVoteData("queen", "queen");
+        loadVoteData("smart", "smart");
+        loadVoteData("style", "style");
+        loadVoteData("b-popular", "bPopular");   
+        loadVoteData("g-popular", "gPopular");   
+    </script>
+
+</body>
+
+</html>

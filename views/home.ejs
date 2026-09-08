@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTU Fresher Welcome 2026</title>
+    <style>
+        /* RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* BODY */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 15%,
+            rgba(0, 170, 255, .12),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(40, 120, 255, .10),
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #f4fbff,
+            #e5f6ff,
+            #f8fcff
+        );
+}
+
+
+/* BACKGROUND GRID */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 120, 200, .045) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 120, 200, .045) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+}
+
+
+/* MAIN CONTAINER */
+
+.card-container {
+    position: relative;
+    z-index: 2;
+
+    width: min(320px, 88vw);
+
+    height: auto;
+    min-height: 0;
+    max-height: 90vh;
+
+    margin: auto;
+
+    padding: 20px 30px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .96),
+            rgba(239, 250, 255, .93)
+        );
+
+    border: 1px solid rgba(54, 190, 235, .65);
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 8px 22px rgba(0, 100, 150, .10);
+}
+
+
+/* STICKERS */
+
+.sticker-layer {
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.sticker {
+    position: absolute;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    background: rgba(255, 255, 255, .72);
+
+    border: 1px solid rgba(50, 170, 215, .28);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 14px rgba(0, 90, 140, .08);
+
+    animation:
+        float 5s ease-in-out infinite;
+}
+
+
+/* Sticker Positions */
+
+.sticker-1 {
+    top: 6%;
+    left: 10%;
+    transform: rotate(-14deg);
+}
+
+.sticker-2 {
+    top: 14%;
+    left: 25%;
+    transform: rotate(10deg);
+}
+
+.sticker-3 {
+    top: 7%;
+    right: 15%;
+    transform: rotate(13deg);
+}
+
+.sticker-4 {
+    top: 30%;
+    left: 5%;
+    transform: rotate(-8deg);
+}
+
+.sticker-5 {
+    top: 23%;
+    right: 8%;
+    transform: rotate(11deg);
+}
+
+.sticker-6 {
+    top: 46%;
+    left: 10%;
+    transform: rotate(-15deg);
+}
+
+.sticker-7 {
+    top: 38%;
+    right: 15%;
+    transform: rotate(14deg);
+}
+
+.sticker-8 {
+    top: 61%;
+    left: 3%;
+    transform: rotate(9deg);
+}
+
+.sticker-9 {
+    top: 55%;
+    right: 8%;
+    transform: rotate(-12deg);
+}
+
+.sticker-10 {
+    top: 78%;
+    left: 10%;
+    transform: rotate(-7deg);
+}
+
+.sticker-11 {
+    top: 70%;
+    right: 15%;
+    transform: rotate(12deg);
+}
+
+.sticker-12 {
+    bottom: 8%;
+    left: 28%;
+    transform: rotate(-13deg);
+}
+
+.sticker-13 {
+    bottom: 13%;
+    right: 25%;
+    transform: rotate(11deg);
+}
+
+.sticker-14 {
+    bottom: 5%;
+    left: 52%;
+    transform: rotate(-8deg);
+}
+
+.sticker-15 {
+    bottom: 10%;
+    right: 8%;
+    transform: rotate(9deg);
+}
+
+
+/* Sticker Animation */
+
+@keyframes float {
+
+    50% {
+        margin-top: -8px;
+    }
+}
+
+
+/* UNIVERSITY HEADER */
+
+.university-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 25px;
+
+    margin-bottom: 15px;
+}
+
+.logo-container {
+    width: 150px;
+    height: 165px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.logo-container img {
+    width: 145px;
+    height: auto;
+
+    object-fit: contain;
+}
+
+.university-title {
+    color: #063b99;
+
+    font-size: clamp(
+        26px,
+        4vw,
+        42px
+    );
+
+    line-height: 1.1;
+
+    font-weight: 700;
+}
+
+
+/* TECH BOX */
+
+.tech-box {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin-bottom: 12px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .96),
+            rgba(232, 248, 255, .90)
+        );
+
+    border: 1px solid rgba(56, 190, 230, .55);
+
+    box-shadow:
+        0 5px 15px rgba(0, 100, 150, .07);
+}
+
+
+/* EVENT TITLE */
+
+.event-title {
+    text-align: center;
+
+    color: #0757c7;
+
+    font-size: clamp(
+        22px,
+        4vw,
+        34px
+    );
+
+    font-weight: 700;
+}
+
+
+/* COUNTDOWN */
+
+.timer-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.time-card {
+    min-height: 90px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #edf9ff
+        );
+
+    border: 1px solid rgba(76, 199, 235, .55);
+
+    border-radius: 14px;
+}
+
+.time-value {
+    color: #0760d5;
+
+    font-size: clamp(
+        30px,
+        5vw,
+        48px
+    );
+
+    font-weight: 800;
+}
+
+.time-label {
+    margin-top: 7px;
+
+    color: #0646a6;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* DATE */
+
+.date-box {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #17243c;
+
+    font-size: clamp(
+        15px,
+        2.5vw,
+        21px
+    );
+
+    text-align: center;
+}
+
+.calendar-icon {
+    width: 28px;
+    height: 28px;
+
+    fill: none;
+
+    stroke: #087dc1;
+
+    stroke-width: 1.8;
+}
+
+
+/* BUTTON */
+
+.action-btn {
+    position: relative;
+    z-index: 5;
+
+    width: 85%;
+
+    min-height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: clamp(
+        19px,
+        3vw,
+        27px
+    );
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0878e8,
+            #1199e8,
+            #086ed1
+        );
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 7px 16px rgba(0, 90, 150, .13);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 20px rgba(0, 90, 150, .18);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.arrow {
+    animation:
+        arrow 1.2s ease-in-out infinite;
+}
+
+@keyframes arrow {
+
+    50% {
+        transform: translateX(7px);
+    }
+}
+
+
+/* LAPTOP / DESKTOP
+   ONLY THE CONTAINER IS MADE SMALLER */
+
+@media (min-width: 1025px) {
+
+    body {
+        min-height: 100vh;
+        padding: 15px;
+    }
+
+    .card-container {
+        width: 430px;
+
+        height: auto;
+        min-height: 0;
+        max-height: 90vh;
+
+        margin: auto;
+
+        padding: 18px 24px;
+
+        border-radius: 28px;
+    }
+
+    .university-header {
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .logo-container {
+        width: 75px;
+        height: 75px;
+    }
+
+    .logo-container img {
+        width: 72px;
+    }
+
+    .university-title {
+        font-size: 21px;
+    }
+
+    .tech-box {
+        padding: 8px;
+        margin-bottom: 7px;
+        border-radius: 13px;
+    }
+
+    .event-title {
+        font-size: 19px;
+    }
+
+    .timer-grid {
+        gap: 6px;
+    }
+
+    .time-card {
+        min-height: 60px;
+        border-radius: 11px;
+    }
+
+    .time-value {
+        font-size: 28px;
+    }
+
+    .time-label {
+        font-size: 9px;
+        margin-top: 3px;
+    }
+
+    .date-box {
+        min-height: 38px;
+        font-size: 13px;
+    }
+
+    .calendar-icon {
+        width: 21px;
+        height: 21px;
+    }
+
+    .action-btn {
+        width: 82%;
+        min-height: 47px;
+        font-size: 17px;
+        border-radius: 13px;
+    }
+
+
+    /* Desktop Stickers */
+
+    .sticker {
+        width: 48px;
+        height: 48px;
+        font-size: 25px;
+    }
+
+    .sticker-1 {
+        top: 10%;
+        left: 41%;
+    }
+
+    .sticker-4 {
+        top: 23%;
+        left: 27%;
+    }
+
+    .sticker-6 {
+        top: 50%;
+        left: 27%;
+    }
+
+    .sticker-8 {
+        top: 75%;
+        left: 28%;
+    }
+
+    .sticker-10 {
+        top: 85%;
+        left: 42%;
+    }
+
+    .sticker-3 {
+        top: 10%;
+        right: 42%;
+    }
+
+    .sticker-5 {
+        top: 23%;
+        right: 27%;
+    }
+
+    .sticker-7 {
+        top: 50%;
+        right: 27%;
+    }
+
+    .sticker-9 {
+        top: 75%;
+        right: 28%;
+    }
+
+    .sticker-2 {
+        top: 85%;
+        left: 55%;
+    }
+}
+
+
+/* iPAD / TABLET
+   ONLY THE CONTAINER IS MADE SMALLER */
+
+@media (min-width: 651px) and (max-width: 1024px) {
+
+    body {
+        min-height: 100vh;
+        padding: 20px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-container {
+        width: 400px;
+
+        height: auto;
+        min-height: 0;
+        max-height: 90vh;
+
+        margin: auto;
+
+        padding: 16px 20px;
+
+        border-radius: 25px;
+    }
+
+    .university-header {
+        gap: 9px;
+        margin-bottom: 9px;
+    }
+
+    .logo-container {
+        width: 68px;
+        height: 68px;
+    }
+
+    .logo-container img {
+        width: 65px;
+    }
+
+    .university-title {
+        font-size: 20px;
+    }
+
+    .tech-box {
+        padding: 7px;
+        margin-bottom: 6px;
+        border-radius: 12px;
+    }
+
+    .event-title {
+        font-size: 18px;
+    }
+
+    .timer-grid {
+        gap: 5px;
+    }
+
+    .time-card {
+        min-height: 56px;
+        border-radius: 10px;
+    }
+
+    .time-value {
+        font-size: 26px;
+    }
+
+    .time-label {
+        font-size: 8px;
+        margin-top: 3px;
+    }
+
+    .date-box {
+        min-height: 35px;
+        font-size: 12px;
+    }
+
+    .calendar-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .action-btn {
+        width: 82%;
+        min-height: 44px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+
+    /* Tablet Stickers */
+
+    .sticker {
+        width: 43px;
+        height: 43px;
+
+        font-size: 23px;
+
+        border-radius: 12px;
+    }
+
+    .sticker-1 {
+        top: 7%;
+        left: 3%;
+    }
+
+    .sticker-4 {
+        top: 29%;
+        left: 2%;
+    }
+
+    .sticker-6 {
+        top: 53%;
+        left: 3%;
+    }
+
+    .sticker-8 {
+        top: 74%;
+        left: 5%;
+    }
+
+    .sticker-3 {
+        top: 8%;
+        right: 3%;
+    }
+
+    .sticker-5 {
+        top: 27%;
+        right: 2%;
+    }
+
+    .sticker-7 {
+        top: 48%;
+        right: 3%;
+    }
+
+    .sticker-9 {
+        top: 69%;
+        right: 4%;
+    }
+
+    .sticker-2 {
+        top: 15%;
+        left: 18%;
+    }
+
+    .sticker-10 {
+        bottom: 7%;
+        left: 22%;
+    }
+}
+
+
+/* MOBILE PHONE
+   381px – 650px
+   UNCHANGED */
+
+@media (min-width: 381px) and (max-width: 650px) {
+
+    body {
+        min-height: 100vh;
+        padding: 12px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-container {
+        width: 85%;
+        max-width: 480px;
+
+        height: auto;
+        min-height: 0;
+        max-height: none;
+
+        margin: auto;
+
+        padding: 14px 12px;
+
+        border-radius: 22px;
+    }
+
+    .university-header {
+        flex-direction: column;
+
+        gap: 2px;
+
+        margin-bottom: 8px;
+    }
+
+    .logo-container {
+        width: 90px;
+        height: 90px;
+    }
+
+    .logo-container img {
+        width: 86px;
+    }
+
+    .university-title {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    .tech-box {
+        padding: 10px;
+        margin-bottom: 7px;
+        border-radius: 13px;
+    }
+
+    .event-title {
+        font-size: 20px;
+    }
+
+    .timer-grid {
+        gap: 5px;
+    }
+
+    .time-card {
+        min-height: 62px;
+    }
+
+    .time-value {
+        font-size: 24px;
+    }
+
+    .time-label {
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+    .date-box {
+        min-height: 38px;
+        font-size: 13px;
+    }
+
+    .calendar-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .action-btn {
+        width: 90%;
+        min-height: 52px;
+        font-size: 18px;
+    }
+
+    .sticker {
+        width: 38px;
+        height: 38px;
+
+        font-size: 21px;
+
+        border-radius: 11px;
+    }
+
+    .sticker-1 {
+        top: 12%;
+        left: 27%;
+    }
+
+    .sticker-4 {
+        top: 30%;
+        left: 3%;
+    }
+
+    .sticker-6 {
+        top: 50%;
+        left: 3%;
+    }
+
+    .sticker-8 {
+        top: 68%;
+        left: 3%;
+    }
+
+    .sticker-3 {
+        top: 12%;
+        right: 25%;
+    }
+
+    .sticker-5 {
+        top: 30%;
+        right: 3%;
+    }
+
+    .sticker-7 {
+        top: 50%;
+        right: 3%;
+    }
+
+    .sticker-9 {
+        top: 68%;
+        right: 3%;
+    }
+
+    .sticker-2 {
+        top: 83%;
+        left: 60%;
+    }
+
+    .sticker-10 {
+        top: 83%;
+        left: 28%;
+    }
+
+}
+
+
+/* SMALL MOBILE
+   380px AND BELOW
+   UNCHANGED */
+
+@media (max-width: 380px) {
+
+    body {
+        min-height: 100vh;
+        padding: 8px;
+    }
+
+    .card-container {
+        width: 100%;
+
+        height: auto;
+        min-height: 0;
+
+        padding: 11px 9px;
+
+        border-radius: 18px;
+    }
+
+    .university-header {
+        flex-direction: column;
+
+        gap: 1px;
+
+        margin-bottom: 6px;
+    }
+
+    .logo-container {
+        width: 75px;
+        height: 75px;
+    }
+
+    .logo-container img {
+        width: 72px;
+    }
+
+    .university-title {
+        font-size: 19px;
+    }
+
+    .tech-box {
+        padding: 5px;
+        margin-bottom: 5px;
+        border-radius: 11px;
+    }
+
+    .event-title {
+        font-size: 17px;
+    }
+
+    .timer-grid {
+        gap: 4px;
+    }
+
+    .time-card {
+        min-height: 54px;
+    }
+
+    .time-value {
+        font-size: 21px;
+    }
+
+    .time-label {
+        font-size: 9px;
+        margin-top: 2px;
+    }
+
+    .date-box {
+        min-height: 32px;
+        font-size: 11px;
+        gap: 5px;
+    }
+
+    .calendar-icon {
+        width: 19px;
+        height: 19px;
+    }
+
+    .action-btn {
+        width: 92%;
+        min-height: 47px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+    .sticker {
+        width: 32px;
+        height: 32px;
+
+        font-size: 18px;
+
+        border-radius: 9px;
+    }
+
+     .sticker-1 {
+        top: 14%;
+        left: 8%;
+             }
+    .sticker-4 {
+               top: 11%;
+                 left: 45%;
+    }
+
+    .sticker-6 {
+        top: 81%;
+        left: 7%;
+    }
+
+    .sticker-8 {
+        display: none;
+    }
+
+    .sticker-3 {
+        top: 85%;
+        right: 47%;
+    }
+
+    .sticker-5 {
+        top: 14%;
+        right: 6%;
+    }
+
+    .sticker-7 {
+       top: 81%;
+        right: 7%;
+    }
+  
+
+    .sticker-9 {
+        display: none;
+    }
+
+    .sticker-2, .sticker-10{
+        display :none;
+    }
+}
+
+
+/* LANDSCAPE PHONE
+   UNCHANGED */
+
+@media (max-width: 900px) and (orientation: landscape) {
+
+    body {
+        padding: 8px 20px;
+    }
+
+    .card-container {
+        width: min(700px, 90vw);
+
+        height: auto;
+        min-height: 0;
+
+        padding: 8px 25px;
+
+        border-radius: 18px;
+    }
+
+    .university-header {
+        flex-direction: row;
+
+        gap: 12px;
+
+        margin-bottom: 5px;
+    }
+
+    .logo-container {
+        width: 65px;
+        height: 65px;
+    }
+
+    .logo-container img {
+        width: 62px;
+    }
+
+    .university-title {
+        font-size: 22px;
+    }
+
+    .tech-box {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    .event-title {
+        font-size: 19px;
+    }
+
+    .time-card {
+        min-height: 48px;
+    }
+
+    .time-value {
+        font-size: 22px;
+    }
+
+    .time-label {
+        font-size: 8px;
+    }
+
+    .date-box {
+        min-height: 30px;
+        font-size: 11px;
+    }
+
+    .action-btn {
+        min-height: 42px;
+        font-size: 16px;
+    }
+
+    .sticker {
+        width: 30px;
+        height: 30px;
+        font-size: 17px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+<div class="card-container">
+
+    <div class="sticker-layer">
+    <div class="sticker sticker-1">🎓</div>
+    <div class="sticker sticker-2">✨</div>
+    <div class="sticker sticker-3">⚙️</div>
+    <div class="sticker sticker-4">💻</div>
+    <div class="sticker sticker-5">⚡</div>
+    <div class="sticker sticker-6">🚀</div>
+    <div class="sticker sticker-7">💡</div>
+    <div class="sticker sticker-8">🔬</div>
+    <div class="sticker sticker-9">📡</div>
+    <div class="sticker sticker-10">🏆</div>
+</div>
+
+    <div class="university-header">
+        <div class="logo-container">
+            <img src="/image/mtulogo.png"
+                 alt="Mandalay Technological University Logo">
+        </div>
+
+        <h1 class="university-title">
+            Mandalay Technological University
+        </h1>
+    </div>
+
+    <div class="tech-box">
+        <div class="event-title">
+            Freshers' Welcome <span id="eventYear"></span>
+        </div>
+    </div>
+
+    <div class="tech-box">
+        <div class="timer-grid">
+            <div class="time-card">
+                <div id="hours" class="time-value">00</div>
+                <div class="time-label">Hours</div>
+            </div>
+
+            <div class="time-card">
+                <div id="mins" class="time-value">00</div>
+                <div class="time-label">Mins</div>
+            </div>
+
+            <div class="time-card">
+                <div id="secs" class="time-value">00</div>
+                <div class="time-label">Secs</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-box">
+        <div class="date-box">
+
+            <svg class="calendar-icon" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="17" rx="2"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+
+            <span id="currentDate"></span>
+        </div>
+    </div>
+
+   <a href="/votingpage" class="action-btn">
+    Click to Vote
+    <span class="arrow">»»</span>
+</a>
+
+</div>
+<!-- Include Socket.io client library -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+let serverData = JSON.parse('<%- JSON.stringify(countdown) %>');
+/* CURRENT YEAR */
+function updateYear() {
+    if ($("eventYear")) {
+        $("eventYear").textContent = new Date().getFullYear();
+    }
+}
+
+/* CURRENT DATE */
+function updateDate() {
+    const today = new Date();
+    if ($("currentDate")) {
+        $("currentDate").textContent =
+            "Date: " +
+            today.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+    }
+}
+
+/* HELPER: Convert HH:MM:SS into milliseconds */
+function parseDurationToMs(durationStr) {
+    if (!durationStr) return 0;
+    if (!durationStr.includes(':')) return Number(durationStr) || 0;
+    const parts = durationStr.split(':');
+    const hours = parseInt(parts[0], 10) || 0;
+    const minutes = parseInt(parts[1], 10) || 0;
+    const seconds = parseInt(parts[2], 10) || 0;
+    return ((hours * 3600) + (minutes * 60) + seconds) * 1000;
+}
+
+/* COUNTDOWN */
+/* COUNTDOWN */
+function updateCountdown() {
+    if (!serverData) return;
+
+    const status = (serverData.countdown_status || "").toLowerCase();
+    const now = Date.now();
+    const targetTime = serverData.target_time ? new Date(serverData.target_time).getTime() : 0;
+    const durationMs = parseDurationToMs(serverData.duration);
+
+    // Helper to extract and display raw duration dynamically without calculation
+   function showRawDuration() {
+        let totalMs = 0;
+        if (serverData.duration !== undefined && serverData.duration !== null) {
+            if (typeof serverData.duration === 'number' || !isNaN(serverData.duration)) {
+                totalMs = Number(serverData.duration);
+            } else if (String(serverData.duration).includes(':')) {
+                totalMs = parseDurationToMs(serverData.duration);
+            } else {
+                totalMs = Number(serverData.duration) || 0;
+            }
+        }
+
+        const totalSecs = Math.floor(totalMs / 1000);
+        const h = String(Math.floor(totalSecs / 3600)).padStart(2, "0");
+        const m = String(Math.floor((totalSecs % 3600) / 60)).padStart(2, "0");
+        const s = String(totalSecs % 60).padStart(2, "0");
+
+        if ($("hours")) $("hours").textContent = h;
+        if ($("mins")) $("mins").textContent = m;
+        if ($("secs")) $("secs").textContent = s;
+    }
+    // BEFORE START TIME, RESET, PAUSED, OR NO TARGET: Display raw duration statically
+    if (status === "reset" || status === "paused" || !status || status === "refresh" || !targetTime || now < targetTime) {
+        showRawDuration();
+        return;
+    }
+
+    // ONLY WHEN START TIME IS REACHED OR PASSED: Run active countdown
+    const endTime = targetTime + durationMs;
+    const diff = Math.max(0, endTime - now);
+
+    if (diff <= 0 || status === "finished") {
+        if ($("hours")) $("hours").textContent = "00";
+        if ($("mins")) $("mins").textContent = "00";
+        if ($("secs")) $("secs").textContent = "00";
+        return;
+    }
+
+    const hours = Math.floor(diff / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+
+    if ($("hours")) $("hours").textContent = String(hours).padStart(2, "0");
+    if ($("mins")) $("mins").textContent = String(minutes).padStart(2, "0");
+    if ($("secs")) $("secs").textContent = String(seconds).padStart(2, "0");
+}
+
+
+/* INITIAL FETCH (Fallback on load so state isn't empty) */
+async function fetchInitialCountdown() {
+    try {
+        const response = await fetch("/api/countdown");
+        if (response.ok) {
+            serverData = await response.json();
+            updateCountdown();
+        }
+    } catch (error) {
+        console.error("Failed to load initial countdown:", error);
+    }
+}
+
+/* PAGE LOAD */
+updateDate();
+updateYear();
+fetchInitialCountdown();
+
+/* SOCKET.IO REAL-TIME LISTENER (Replaces setInterval fetch spam) */
+const socket = io();
+socket.on("countdownUpdated", (newData) => {
+    console.log("Real-time countdown update received:", newData);
+    serverData = newData;
+    updateCountdown();
+});
+
+/* INTERVALS (Only local ticking and calendar updates left - no more server fetch polling) */
+setInterval(updateCountdown, 1000);
+setInterval(updateDate, 60000);
+setInterval(updateYear, 60000);
+</script>
+</body>
+</html>
+</html>

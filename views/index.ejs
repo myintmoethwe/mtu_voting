@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/image/mtulogo.png" type="image/x-icon">
+    <title>MTU Voting System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #c0e8f80a; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: opacity 0.6s ease-in-out; opacity: 1; }
+        body.fade-out { opacity: 0; }
+        .welcome-container { display: flex; align-items: center; justify-content: center; gap: 35px; width: 100%; max-width: 720px; padding: 0 30px; height: 220px; margin: 0 auto; }
+        .icon-side { display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5) rotate(-15deg); animation: popInLogo 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.2s; }
+        .logo-wrapper { position: relative; display: flex; align-items: center; justify-content: center; animation: floatingBounce 3.5s ease-in-out infinite alternate 1.6s; }
+        .logo-img { width: clamp(75px, 17vw, 100px); height: auto; background: transparent; filter: drop-shadow(0 12px 25px rgba(37, 99, 235, 0.25)); }
+        .text-side { text-align: left; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: translateX(40px); animation: slideInText 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s; }
+        .university-label { color: #64748b; font-size: clamp(0.65rem, 1.5vw, 0.75rem); font-weight: 700; letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 4px; opacity: 0; transform: translateY(15px); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s; }
+        .brand-name { color: #0f172a; font-size: clamp(2.2rem, 7vw, 3rem); font-weight: 900; letter-spacing: -1px; line-height: 1; margin: 2px 0 6px 0; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.9s; display: flex; align-items: center; gap: 6px; }
+        .brand-name span { color: #2563eb; text-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+        .system-tagline { color: #475569; font-size: clamp(0.65rem, 1.5vw, 0.75rem); text-transform: uppercase; letter-spacing: 3px; font-weight: 600; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.1s; display: flex; align-items: center; gap: 10px; }
+        .system-tagline::before { content: ''; display: inline-block; width: 20px; height: 2px; background: #2563eb; box-shadow: 0 0 6px rgba(37, 99, 235, 0.4); animation: expandLine 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.3s; transform: scaleX(0); transform-origin: left; }
+        @keyframes popInLogo { 0% { opacity: 0; transform: scale(0.5) rotate(-15deg); } 100% { opacity: 1; transform: scale(1) rotate(0deg); } }
+        @keyframes floatingBounce { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(-8px) scale(1.02); } }
+        @keyframes slideInText { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes expandLine { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+        @media (max-width: 480px) { body { padding: 16px; } .welcome-container { flex-direction: column; gap: 16px; height: auto; padding: 0 15px; text-align: center; } .icon-side { transform: scale(0.5) translateY(20px); } .logo-wrapper { transform: none; } .logo-img { width: 70px; } .text-side { text-align: center; transform: translateY(20px); align-items: center; } .university-label { font-size: 0.6rem; letter-spacing: 2px; } .brand-name { font-size: 1.8rem; justify-content: center; } .system-tagline { font-size: 0.6rem; letter-spacing: 2px; justify-content: center; } .system-tagline::before { display: none; }  }
+        @media (max-width: 352px) { .sticker-layer { display: none !important; } }
+</style>
+</head>
+<body>
+
+    <div class="welcome-container">
+        <div class="icon-side">
+            <div class="logo-wrapper">
+                <img src="/image/mtulogo.png" alt="MTU Logo" class="logo-img">
+            </div>
+        </div>
+
+        <div class="text-side">
+            <span class="university-label">Mandalay Technological University</span>
+            <h1 class="brand-name">CODEA<span>SQUAD</span></h1>
+            <div class="system-tagline">Secure Voting System</div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        socket.emit('phone-scanned');
+
+        setTimeout(() => {
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = '/authentication'; 
+            }, 600);
+        }, 3400);
+    </script>
+</body>
+</html>

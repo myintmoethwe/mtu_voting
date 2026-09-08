@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - King & Queen</title>
+
+    <link rel="stylesheet" href="../style/admin_dashboard.css">
+
+    <!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        50: '#f0f9ff',
+                        100: '#e0f2fe',
+                        500: '#0ea5e9',
+                        600: '#0284c7',
+                        700: '#0369a1',
+                        900: '#0f172a',
+                    }
+                }
+            }
+        }
+    }
+</script>
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+</style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>👑</span>
+            <h2>King & Queen</h2>
+        </div>
+
+        <nav>
+
+            <a href="#dashboard-page" class="active" onclick="showPage('dashboard', this)">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+            <a href="#candidates-page" onclick="showPage('candidates', this)">
+                <span>👥</span>
+                Candidates
+            </a>
+
+            <a href="#vote-page" onclick="showPage('vote', this)">
+                <span>🗳️</span>
+                Votes
+            </a>
+
+            <a href="#result-page" onclick="showPage('result', this)">
+                <span>🏆</span>
+                Results
+            </a>
+            
+            <a href="#setting-page" onclick="showPage('setting', this)">
+                <span>⚙️</span>
+                Settings
+            </a>
+
+        </nav>
+
+        <a href="#" class="logout">
+            <span>🚪</span>
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- Dashboard -->
+
+        <section id="dashboard-page" class="page-section">
+            <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back, Admin!</p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- STATISTICS -->
+        <section class="statistics">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+                    <p>Total Voters</p>
+                    <h2>1,250</h2>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+                    <p>Total Voters</p>
+                    <h2>1,250</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🗳️
+                </div>
+
+                <div>
+                    <p>Total Votes</p>
+                    <h2>2,180</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👑
+                </div>
+
+                <div>
+                    <p>King Votes</p>
+                    <h2>1,080</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👸
+                </div>
+
+                <div>
+                    <p>Queen Votes</p>
+                    <h2>1,100</h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VOTING STATUS -->
+        <section class="status-card">
+
+            <div>
+
+                <h2>Voting Status</h2>
+
+                <p>
+                    King & Queen Selection is currently
+                    <strong>OPEN</strong>.
+                </p>
+
+            </div>
+
+            <span class="status open">
+                ● LIVE
+            </span>
+
+        </section>
+
+
+        <!-- CONTENT GRID -->
+        <section class="content-grid">
+
+
+            <!-- KING RESULTS -->
+            <div class="result-card">
+
+                <div class="card-header">
+
+                    <h2>👑 King Results</h2>
+
+                    <a href="#">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            1
+                        </div>
+
+                        <img 
+                            src="voteimg/K01.jpg"
+                            alt="Aung Aung"
+                        >
+
+                        <div>
+                            <strong>Aung Aung</strong>
+                            <small>K-01</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>350</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            2
+                        </div>
+
+                        <img
+                            src="voteimg/K02.jpg"
+                            alt="Min Min"
+                        >
+
+                        <div>
+                            <strong>Min Min</strong>
+                            <small>K-02</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>280</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            3
+                        </div>
+
+                        <img
+                            src="voteimg/K03.jpg"
+                            alt="Ko Ko"
+                        >
+
+                        <div>
+                            <strong>Ko Ko</strong>
+                            <small>K-03</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>220</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUEEN RESULTS -->
+            <div class="result-card">
+
+                <div class="card-header">
+
+                    <h2>👸 Queen Results</h2>
+
+                    <a href="#">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            1
+                        </div>
+
+                        <img
+                            src="voteimg/Q01.jpg"
+                            alt="Su Su"
+                        >
+
+                        <div>
+                            <strong>Su Su</strong>
+                            <small>Q-01</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>390</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            2
+                        </div>
+
+                        <img
+                            src="voteimg/Q02.jpg"
+                            alt="May May"
+                        >
+
+                        <div>
+                            <strong>May May</strong>
+                            <small>Q-02</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>320</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+
+                <div class="candidate-row">
+
+                    <div class="candidate-info">
+
+                        <div class="rank">
+                            3
+                        </div>
+
+                        <img
+                            src="voteimg/Q03.jpg"
+                            alt="Ei Ei"
+                        >
+
+                        <div>
+                            <strong>Ei Ei</strong>
+                            <small>Q-03</small>
+                        </div>
+
+                    </div>
+
+                    <div class="vote-count">
+                        <strong>270</strong>
+                        <small>votes</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="quick-actions">
+
+            <h2>Quick Actions</h2>
+
+            <div class="action-container">
+
+            <a href="javascript:void(0)" class="action-card" onclick="openAddCandidateModal()">
+                <span>➕</span>
+                <div>
+                    <strong>Add Candidate</strong>
+                    <small>Add a new King or Queen</small>
+                </div>
+            </a>
+
+            <a href="#result-page" class="action-card" onclick="showPage('result', this)">
+                <span>📊</span>
+                <div>
+                    <strong>View Results</strong>
+                    <small>Check complete voting results</small>
+                </div>
+            </a>
+
+            <a href="#setting-page" class="action-card" onclick="showPage('setting', this)">
+                <span>⚙️</span>
+                <div>
+                    <strong>Voting Settings</strong>
+                    <small>Manage voting period</small>
+                </div>
+            </a>
+
+        </div>
+
+        </section>
+        </section>
+
+
+        <!-- Candidate Page -->
+
+        <section id="candidates-page" class="page-section">
+
+            <div class="page-header">
+
+                <div>
+                    <h1>Candidates</h1>
+
+                    <p>
+                        Manage King and Queen candidates
+                    </p>
+                </div>
+
+                <button class="add-btn">
+                    + Add Candidate
+                </button>
+
+            </div>
+
+
+            <!-- FILTER -->
+
+            <div class="filter-box">
+
+                <div class="search-box">
+                    🔍
+                    <input
+                        type="text"
+                        placeholder="Search candidate..."
+                        onkeyup="searchCandidates()"
+                        id="searchInput"
+                    >
+                </div>
+
+
+                <select id="categoryFilter"
+                        onchange="filterCandidates()">
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                    <option value="King">
+                        👑 King
+                    </option>
+
+                    <option value="Queen">
+                        👸 Queen
+                    </option>
+
+                </select>
+
+
+                <select id="statusFilter"
+                        onchange="filterCandidates()">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Inactive">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- CANDIDATE TABLE -->
+
+            <div class="candidate-table">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Candidate</th>
+                            <th>Category</th>
+                            <th>Votes</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="candidateTable">
+
+                        <tr data-category="King"
+                            data-status="Active">
+
+                            <td>K-01</td>
+
+                            <td>
+
+                                <div class="candidate-info">
+
+                                    <img
+                            src="voteimg/K01.jpg"
+                                        alt="Aung Aung"
+                                    >
+
+                                    <div>
+                                        <strong>Aung Aung</strong>
+                                        <small>Age 21</small>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="category king">
+                                    👑 King
+                                </span>
+                            </td>
+
+                            <td>
+                                <strong>350</strong>
+                            </td>
+
+                            <td>
+                                <span class="status active">
+                                    Active
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <button class="edit-btn">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteCandidate(this)"
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr data-category="King"
+                            data-status="Active">
+
+                            <td>K-02</td>
+
+                            <td>
+
+                                <div class="candidate-info">
+
+                                    <img
+                            src="voteimg/K02.jpg"
+                                        alt="Min Min"
+                                    >
+
+                                    <div>
+                                        <strong>Min Min</strong>
+                                        <small>Age 22</small>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="category king">
+                                    👑 King
+                                </span>
+                            </td>
+
+                            <td>
+                                <strong>280</strong>
+                            </td>
+
+                            <td>
+                                <span class="status active">
+                                    Active
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <button class="edit-btn">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteCandidate(this)"
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr data-category="Queen"
+                            data-status="Active">
+
+                            <td>Q-01</td>
+
+                            <td>
+
+                                <div class="candidate-info">
+
+                                    <img
+                            src="voteimg/Q01.jpg"
+                                        alt="Su Su"
+                                    >
+
+                                    <div>
+                                        <strong>Su Su</strong>
+                                        <small>Age 21</small>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="category queen">
+                                    👸 Queen
+                                </span>
+                            </td>
+
+                            <td>
+                                <strong>390</strong>
+                            </td>
+
+                            <td>
+                                <span class="status active">
+                                    Active
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <button class="edit-btn">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteCandidate(this)"
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr data-category="Queen"
+                            data-status="Inactive">
+
+                            <td>Q-02</td>
+
+                            <td>
+
+                                <div class="candidate-info">
+
+                                    <img
+                            src="voteimg/Q02.jpg"
+                                        alt="May May"
+                                    >
+
+                                    <div>
+                                        <strong>May May</strong>
+                                        <small>Age 22</small>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="category queen">
+                                    👸 Queen
+                                </span>
+                            </td>
+
+                            <td>
+                                <strong>320</strong>
+                            </td>
+
+                            <td>
+                                <span class="status inactive">
+                                    Inactive
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <button class="edit-btn">
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteCandidate(this)"
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- Voter Page -->
+
+        <section id="vote-page" class="page-section">
+
+            <div class="page-header">
+                <h1>Vote Records</h1>
+                <p>View all voting records</p>
+            </div>
+
+            <div class="vote-table-container">
+                <table class="vote-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Voter Name</th>
+                            <th>Voter ID</th>
+                            <th>Candidate</th>
+                            <th>Vote Status</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Mg Mg</td>
+                            <td>V001</td>
+                            <td>Candidate A</td>
+                            <td><span class="status voted">Voted</span></td>
+                            <td>16 Aug 2026</td>
+                            <td>10:30 AM</td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Su Su</td>
+                            <td>V002</td>
+                            <td>Candidate B</td>
+                            <td><span class="status voted">Voted</span></td>
+                            <td>16 Aug 2026</td>
+                            <td>10:45 AM</td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Aung Aung</td>
+                            <td>V003</td>
+                            <td>Candidate C</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- Result Page -->
+
+        <section id="result-page" class="page-section">
+
+            <div class="page-header">
+                <h1>Voting Results</h1>
+                <p>View the current voting results</p>
+            </div>
+
+            <div class="result-container">
+
+                <div class="result-card">
+                    <h2>King</h2>
+
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Candidate Name</th>
+                                <th>Total Votes</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>🥇 1</td>
+                                <td>Mg Mg</td>
+                                <td>450</td>
+                                <td>45%</td>
+                            </tr>
+
+                            <tr>
+                                <td>🥈 2</td>
+                                <td>Aung Aung</td>
+                                <td>320</td>
+                                <td>32%</td>
+                            </tr>
+
+                            <tr>
+                                <td>🥉 3</td>
+                                <td>Kyaw Kyaw</td>
+                                <td>230</td>
+                                <td>23%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="result-card">
+                    <h2>Queen</h2>
+
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Candidate Name</th>
+                                <th>Total Votes</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>🥇 1</td>
+                                <td>Su Su</td>
+                                <td>520</td>
+                                <td>52%</td>
+                            </tr>
+
+                            <tr>
+                                <td>🥈 2</td>
+                                <td>May May</td>
+                                <td>300</td>
+                                <td>30%</td>
+                            </tr>
+
+                            <tr>
+                                <td>🥉 3</td>
+                                <td>Ei Ei</td>
+                                <td>180</td>
+                                <td>18%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Setting page -->
+
+        <section id="setting-page" class="page-section">
+
+            <div class="page-header">
+                <h1>Settings</h1>
+                <p>Manage your voting system settings</p>
+            </div>
+
+            <div class="settings-container">
+
+                <!-- Election Settings -->
+                <!-- Main Card Container -->
+    <!-- Countdown Control Card -->
+<div class="settings-card w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/80 rounded-2xl p-4 md:p-5 shadow-xl shadow-sky-900/5 relative flex flex-col justify-between">
+
+    <!-- Header Section -->
+    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
+        <div>
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-sky-700 bg-sky-100 px-2 py-0.5 rounded-full border border-sky-200 mb-1">
+                MTU Fresher Welcome
+            </span>
+
+            <h1 class="text-lg font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                Countdown Control
+            </h1>
+        </div>
+
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-sky-500/20 text-white text-base">
+            <i class="fa-solid fa-gauge-high"></i>
+        </div>
+    </div>
+
+
+    <div class="space-y-3">
+
+        <!-- Event Schedule Box -->
+        <div class="bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 transition-all duration-300 hover:border-sky-300">
+
+            <div class="flex items-center gap-2 text-sky-700 text-[10px] font-bold tracking-wider uppercase mb-2">
+                <i class="fa-regular fa-calendar-days text-xs"></i>
+                <span>Event Schedule</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+
+                <!-- Date -->
+                <div class="space-y-1">
+                    <label for="eventDate"
+                        class="block text-[10px] font-semibold text-slate-600">
+                        Event Date
+                    </label>
+
+                    <input type="date"
+                        id="eventDate"
+                        class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+                </div>
+
+
+                <!-- Start Time -->
+                <div class="space-y-1">
+                    <label for="startTime"
+                        class="block text-[10px] font-semibold text-slate-600">
+                        Start Time
+                    </label>
+
+                    <input type="time"
+                        id="startTime"
+                        class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Countdown Duration Box -->
+        <div class="bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 transition-all duration-300 hover:border-sky-300">
+
+            <div class="flex items-center gap-2 text-sky-700 text-[10px] font-bold tracking-wider uppercase mb-2">
+                <i class="fa-solid fa-stopwatch text-xs"></i>
+                <span>Countdown Duration</span>
+            </div>
+
+            <div class="space-y-1">
+
+                <input type="text"
+                    id="countdownTime"
+                    value="00:05:00"
+                    maxlength="8"
+                    placeholder="HH:MM:SS"
+                    class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-center text-sm font-bold tracking-widest text-sky-700 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+
+                <p class="text-[9px] text-slate-400 text-center font-medium">
+                    Format: HH:MM:SS
+                </p>
+
+            </div>
+        </div>
+
+
+        <!-- Action Controls -->
+        <div class="grid grid-cols-2 gap-2">
+
+            <!-- Start -->
+            <button onclick="startCountdown()"
+                class="col-span-2 group relative inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-bold rounded-lg shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all overflow-hidden">
+
+                <span class="absolute inset-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+
+                <i class="fa-solid fa-play text-[10px] transition-transform group-hover:scale-110"></i>
+
+                <span>Start Countdown</span>
+            </button>
+
+
+            <!-- Pause -->
+            <button onclick="pauseCountdown()"
+                class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                <i class="fa-solid fa-pause"></i>
+                <span>Pause</span>
+
+            </button>
+
+
+            <!-- Resume -->
+            <button onclick="resumeCountdown()"
+                class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                <i class="fa-solid fa-play"></i>
+                <span>Resume</span>
+
+            </button>
+
+
+            <!-- Reset -->
+            <button onclick="resetCountdown()"
+                class="col-span-2 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Reset Control State</span>
+
+            </button>
+
+        </div>
+
+
+        <!-- Status -->
+        <div id="status"
+            class="flex items-center justify-center gap-2 py-2 px-3 bg-sky-50/80 border border-sky-100 rounded-lg text-sky-900 text-[11px] font-semibold tracking-wide transition-all">
+
+            <i class="fa-solid fa-circle-info text-sky-600"></i>
+
+            <span>Status: Ready</span>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+                <!-- Voting Settings -->
+                <div class="settings-card">
+                    <h2>Voting Settings</h2>
+
+                    <div class="setting-item">
+                        <div>
+                            <h3>One Vote Per Student</h3>
+                            <p>Allow each student to vote only once.</p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" id="oneVote" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <h3>Show Results</h3>
+                            <p>Allow students to see voting results.</p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" id="showResults">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <h3>Candidate Registration</h3>
+                            <p>Allow candidates to register for the election.</p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" id="candidateRegistration">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+
+                <!-- Security Settings -->
+                <div class="settings-card">
+                    <h2>Security</h2>
+
+                    <div class="form-group">
+                        <label for="adminPassword">Admin Password</label>
+
+                        <input type="password"
+                            id="adminPassword"
+                            placeholder="Enter new password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+
+                        <input type="password"
+                            id="confirmPassword"
+                            placeholder="Confirm new password">
+                    </div>
+                </div>
+
+
+                <!-- Save Button -->
+                <div class="settings-actions">
+                    <button class="save-btn" onclick="saveSettings()">
+                        Save Settings
+                    </button>
+
+                    <button class="reset-btn" onclick="resetSettings()">
+                        Reset
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+       
+
+    </main><!-- ADD CANDIDATE MODAL -->
+<div id="candidateModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Candidate</h2>
+            <button class="close-btn" onclick="closeCandidateModal()">&times;</button>
+        </div>
+
+        <form id="candidateForm" onsubmit="handleCandidateSubmit(event)" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="candidateName">Candidate Name</label>
+                <input type="text" id="candidateName" name="name" placeholder="e.g. Kyaw Kyaw" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="candidateCategory">Category</label>
+                    <select id="candidateCategory" name="category" required>
+                        <option value="Smart">Smart</option>
+                        <option value="King">King</option>
+                        <option value="Queen">Queen</option>
+                        <option value="Style">Style</option>
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="candidateMajor">Major:</label>
+                    <input type="text" id="candidateMajor" name="major" placeholder="e.g. Civil" required>
+                </div>
+                <div class="form-group">
+                    <label for="candidateAge">Age (16–24):</label>
+                    <input type="number" id="candidateAge" name="age" min="16" max="24" value="20">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="candidateStatus">Status</label>
+                <select id="candidateStatus" name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="candidatePhoto">Profile Image (From Device)</label>
+                <input type="file" id="candidatePhoto" name="photo" accept="image/*">
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeCandidateModal()">Cancel</button>
+                <button type="submit" class="btn-submit">Save Candidate</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <script>
+      function showPage(pageId, element) {
+    // Clear the URL search parameter so it stops forcing a specific section on reload
+    if (window.history.replaceState) {
+        const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+    }
+
+    // Hide all section pages
+    document.querySelectorAll('.page-section, div[id$="-page"]').forEach(section => {
+        section.style.display = "none";
+        section.classList.remove('active');
+    });
+
+    // Show target section (Supports both 'candidates-page' and 'candidate-page' naming conventions)
+    let targetSection = document.getElementById(pageId + "-page");
+    if (!targetSection && pageId === 'candidates') {
+        targetSection = document.getElementById("candidate-page");
+    }
+    if (!targetSection && pageId === 'setting') {
+        targetSection = document.getElementById("settings-page");
+    }
+
+    if (targetSection) {
+        targetSection.style.display = "block";
+        targetSection.classList.add('active');
+    }
+
+    // Update active state on sidebar navigation links
+    document.querySelectorAll(".sidebar nav a, .sidebar a").forEach(link => {
+        link.classList.remove("active");
+    });
+
+    if (element) {
+        element.classList.add("active");
+    } else {
+        const matchingSidebarLink = document.querySelector(`.sidebar a[href="#${pageId}-page"], .sidebar a[onclick*="${pageId}"]`);
+        if (matchingSidebarLink) {
+            matchingSidebarLink.classList.add("active");
+        }
+    }
+    localStorage.setItem('activeAdminTab', pageId);
+}
+
+
+
+         function saveSettings() {
+
+    const electionName =
+        document.getElementById("electionName").value;
+
+    const status =
+        document.getElementById("electionStatus").value;
+
+    const oneVote =
+        document.getElementById("oneVote").checked;
+
+    const showResults =
+        document.getElementById("showResults").checked;
+
+    console.log("Election:", electionName);
+    console.log("Status:", status);
+    console.log("One Vote:", oneVote);
+    console.log("Show Results:", showResults);
+
+    alert("Settings saved successfully!");
+}
+
+
+function resetSettings() {
+
+    document.getElementById("electionName").value =
+        "King & Queen Voting 2026";
+
+    document.getElementById("electionStatus").value = "open";
+
+    document.getElementById("oneVote").checked = true;
+
+    document.getElementById("showResults").checked = false;
+
+    document.getElementById("candidateRegistration").checked = false;
+}
+</script>
+
+<script>
+
+function setStatus(text) {
+
+    document.getElementById("status").innerHTML = `
+        <i class="fa-solid fa-circle-info text-sky-600"></i>
+        <span>${text}</span>
+    `;
+}
+
+
+// START
+async function startCountdown() {
+
+    const date =
+        document.getElementById("eventDate").value;
+
+    const startTime =
+        document.getElementById("startTime").value;
+
+    const duration =
+        document.getElementById("countdownTime").value.trim();
+
+
+    if (!date) {
+        alert("Please select event date.");
+        return;
+    }
+
+    if (!startTime) {
+        alert("Please select start time.");
+        return;
+    }
+
+    if (!duration) {
+        alert("Please enter countdown duration.");
+        return;
+    }
+
+
+    const parts = duration.split(":");
+
+
+    if (parts.length !== 3) {
+
+        alert(
+            "Use HH:MM:SS format.\nExample: 00:05:00"
+        );
+
+        return;
+    }
+
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+    const seconds = Number(parts[2]);
+
+
+    if (
+        isNaN(hours) ||
+        isNaN(minutes) ||
+        isNaN(seconds)
+    ) {
+
+        alert("Invalid countdown duration.");
+
+        return;
+    }
+
+
+    if (
+        hours < 0 ||
+        minutes < 0 ||
+        minutes >= 60 ||
+        seconds < 0 ||
+        seconds >= 60
+    ) {
+
+        alert("Invalid HH:MM:SS format.");
+
+        return;
+    }
+
+
+    const totalDuration =
+        (
+            hours * 3600 +
+            minutes * 60 +
+            seconds
+        ) * 1000;
+
+
+    if (totalDuration <= 0) {
+
+        alert(
+            "Duration must be greater than 00:00:00."
+        );
+
+        return;
+    }
+
+
+    const startDateTime =
+        new Date(`${date}T${startTime}`);
+
+
+    const startTimestamp =
+        startDateTime.getTime();
+
+
+    if (isNaN(startTimestamp)) {
+
+        alert("Invalid date or time.");
+
+        return;
+    }
+
+
+    if (startTimestamp <= Date.now()) {
+
+        alert(
+            "Start date and time must be in the future."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/admin/update",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    newTarget: startTimestamp,
+                    duration: totalDuration
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+            setStatus("Status: Scheduled");
+
+            alert(
+                "Countdown scheduled successfully!"
+            );
+
+        } else {
+
+            alert(
+                data.message ||
+                "Failed to schedule countdown."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Failed to connect to server."
+        );
+    }
+}
+
+
+// PAUSE
+async function pauseCountdown() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/pause",
+                {
+                    method: "POST"
+                }
+            );
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+            setStatus("Status: Paused");
+
+        } else {
+
+            alert(
+                data.message ||
+                "Cannot pause countdown."
+            );
+        }
+
+    } catch (error) {
+
+        alert(
+            "Failed to connect to server."
+        );
+    }
+}
+
+
+// RESUME
+async function resumeCountdown() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/resume",
+                {
+                    method: "POST"
+                }
+            );
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+            setStatus("Status: Running");
+
+        } else {
+
+            alert(
+                data.message ||
+                "Cannot resume countdown."
+            );
+        }
+
+    } catch (error) {
+
+        alert(
+            "Failed to connect to server."
+        );
+    }
+}
+
+
+// RESET
+async function resetCountdown() {
+
+    if (
+        !confirm(
+            "Are you sure you want to reset the countdown?"
+        )
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/reset",
+                {
+                    method: "POST"
+                }
+            );
+
+        const data =
+            await response.json();
+
+
+        if (data.success) {
+
+            setStatus("Status: Reset");
+
+            document.getElementById(
+                "eventDate"
+            ).value = "";
+
+            document.getElementById(
+                "startTime"
+            ).value = "";
+
+            document.getElementById(
+                "countdownTime"
+            ).value = "00:05:00";
+
+        } else {
+
+            alert(
+                "Failed to reset countdown."
+            );
+        }
+
+    } catch (error) {
+
+        alert(
+            "Failed to connect to server."
+        );
+    }
+}
+
+</script>
+<script src="../javascript/admin_dashboard.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="shortcut icon" href="/image/mtulogo.png" type="image/x-icon">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-straight/css/uicons-regular-straight.css'>
+  <link rel="stylesheet" href="../style/votelink.css"> 
+  <title>Election Results</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #fff7fa; color: #333; }
+    
+    header { 
+      text-align: center; padding: 40px 20px; overflow: hidden;
+      color: white;
+      background: linear-gradient(135deg, rgba(49, 88, 172, 1) 0%, rgba(65, 169, 243, 1) 34%, rgba(49, 88, 172, 1) 71%, rgba(79, 147, 241, 1) 100%);
+      background-size: 400% 400%;
+      background-blend-mode: overlay;
+      animation: ShineAnimation 4s ease infinite; 
+    }
+
+    @-webkit-keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+    @-moz-keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+    @keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+
+    header h1 { font-size: 32px; margin-bottom: 10px; }
+    header p { font-size: 16px; opacity: 0.9; }
+    main { width: 90%; max-width: 1200px; margin: 40px auto; }
+
+    .winners-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 40px; }
+    
+    /* Rotating Gradient Border Animation for All Cards */
+    .winner-card {
+      position: relative;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Spinning colorful border line */
+    .winner-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(0deg, transparent, transparent, #daeafb, #e0f1fd, #f8f7a0, #fad2d9);
+      animation: rotateBorder 6s linear infinite;
+      z-index: -2;
+    }
+
+    /* Inner background to cover the rotating gradient center */
+    .winner-card::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: white;
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    @keyframes rotateBorder {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .badge { position: absolute; top: 15px; right: 15px; background: #0056b3; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .winner-card img { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid #0056b3; margin-bottom: 15px; }
+    .winner-card h3 { font-family: cursive; color: #0056b3; font-size: 22px; margin-bottom: 5px; }
+    .winner-card p{font-weight: bold;}
+    .winner-card .award-title { color: #d4af37; font-weight: bold; font-size: 16px; margin-bottom: 10px; text-transform: uppercase; }
+    .winner-card .vote-count { background: #fbebf1; color: #0056b3; padding: 8px 16px; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 10px; }
+    
+    .actions { text-align: center; margin-top: 30px; }
+    .btn { background: #0056b3; color: white; border: none; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; margin: 0 5px; }
+    .btn:hover { background: #003f88; }
+    
+/* =====================================================
+   SUMMARY
+===================================================== */
+.summary {
+    width: 100%;
+    max-width: 1200px;
+    margin: 30px auto 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.summary div {
+    background: #ffffff;
+    padding: 14px 10px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 86, 179, 0.04);
+    border: 1px solid #e5e8ef;
+    transition: all 0.25s ease;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.summary div:hover {
+    transform: translateY(-3px);
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+
+.summary-icon {
+    font-size: 18px;
+    color: #0056b3;
+    margin-bottom: 2px;
+    display: inline-block;
+}
+
+.summary strong {
+    display: block;
+    color: #0056b3;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 2px;
+    margin-bottom: 3px;
+}
+
+.summary span {
+    display: block;
+    color: #666;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* =====================================================
+   PENDING RESULTS CARD (BALANCED, PERFECT UI)
+===================================================== */
+.pending-results {
+  position: relative;
+  text-align: center;
+  background: linear-gradient(145deg, #ffffff, #f4f8fd);
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 86, 179, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
+  max-width: 580px;
+  margin: 70px auto;
+  border: 1px solid rgba(0, 86, 179, 0.08);
+  overflow: hidden;
+  height: 400px;
+}
+
+
+.pending-results::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: rgba(65, 169, 243, 0.08);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.lock-icon-container {
+  position: relative;
+  z-index: 1;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #0056b3, #41a9f3);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 18px rgba(0, 86, 179, 0.25);
+  animation: pulseLock 2.5s infinite ease-in-out;
+}
+.lock-icon-container>i{
+  font-size: 28px;
+}
+
+.pending-results i.ri-lock-password-line {
+  font-size: 30px;
+}
+
+.pending-badge {
+  display: inline-block;
+  background: #e0f1fd;
+  color: #0056b3;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.pending-results h2 {
+  font-size: 22px;
+  color: #1a2b4c;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.pending-results p {
+    color: #556070;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 400px;
+    text-align: left;
+    margin: 16px auto;
+}
+
+.pending-actions {
+  position: relative;
+  z-index: 1;
+}
+
+.pending-actions .btn {
+  background: linear-gradient(135deg, #0056b3, #3158ac);
+  padding: 11px 24px;
+  font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0 5px 12px rgba(0, 86, 179, 0.2);
+  transition: all 0.3s ease;
+}
+
+.pending-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 16px rgba(0, 86, 179, 0.3);
+}
+
+@keyframes pulseLock {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 86, 179, 0.4); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(0, 86, 179, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 86, 179, 0); }
+}
+
+@media (max-width: 768px) {
+    .summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 0 15px;
+    }
+}
+
+    @media print { .actions, header { display: none; } main { width: 100%; margin: 0; } }
+    @media (max-width: 650px) {
+         header h1 {
+          font-size: 21px;  
+         }
+         header p {
+    font-size: 14px;}
+    .main h2{
+          font-size: 20px;
+
+    }
+    .winner-card{    width: 330px;}
+    .winners-grid{    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;}
+    .winner-card img {
+    width: 120px;
+    height: 120px;
+    }
+    .pending-results {
+      padding: 30px 20px;
+      margin: 25px 15px;
+      max-width: 100%;
+    }
+    .pending-results h2 {
+      font-size: 19px;
+    }
+  }
+  </style>
+</head>
+<body>
+   <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="/image/mtulogo.png" alt="MTU Logo">
+            <span>MTU Voting System</span>
+        </a>
+        
+        <button class="nav_toggle" id="nav_toggle" onclick="toggleMenu()">
+            <i class="ri-menu-line" id="menu-icon"></i>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="/home"><i class="ri-home-line"></i> Home</a>
+            <a href="/votingpage" ><i class="ri-chat-poll-line"></i> Voting</a>
+            <a href="/results" class="active"><i class="ri-article-line"></i> Results</a>
+            <a href="./userlogin"><i class="ri-contacts-line"></i> Login</a>
+        </div>
+    </nav>
+  <header>
+    <h1>Official Election Results</h1>
+    <p>Voting Outcomes & Winner Announcements</p>
+  </header>
+
+  <main>
+    <% 
+      // Check if admin toggle is on AND timer is not running
+      const isReady = typeof settings !== 'undefined' && settings && settings.show_results === true && settings.countdown_status !== 'running';
+    %>
+
+    <% if (isReady) { %>
+      <h2 class="main-h2" style="text-align: center; color: #0056b3; margin-bottom: 25px;">Category Winners</h2>
+
+      <div class="winners-grid">
+
+        <!-- KING -->
+        <div class="winner-card">
+          <span class="badge">King</span>
+          <div class="award-title">🌟 King Winner</div>
+          <% if (winners && winners.king) { %>
+            <img src="<%= winners.king.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.king.name %>">
+            <h3><%= winners.king.name %></h3>
+            <p><%= winners.king.description %></p>
+            <div class="vote-count"><%= winners.king.kingVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+        <!-- QUEEN -->
+        <div class="winner-card">
+          <span class="badge">Queen</span>
+          <div class="award-title">🌟 Queen Winner</div>
+          <% if (winners && winners.queen) { %>
+            <img src="<%= winners.queen.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.queen.name %>">
+            <h3><%= winners.queen.name %></h3>
+            <p><%= winners.queen.description %></p>
+            <div class="vote-count"><%= winners.queen.queenVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+        <!-- MR. SMART -->
+        <div class="winner-card">
+          <span class="badge">Smart</span>
+          <div class="award-title">🌟 Mr. Smart</div>
+          <% if (winners && winners.mrSmart) { %>
+            <img src="<%= winners.mrSmart.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.mrSmart.name %>">
+            <h3><%= winners.mrSmart.name %></h3>
+            <p><%= winners.mrSmart.description %></p>
+            <div class="vote-count"><%= winners.mrSmart.smartVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+        <!-- MS. STYLE -->
+        <div class="winner-card">
+          <span class="badge">Style</span>
+          <div class="award-title">🌟 Ms. Style</div>
+          <% if (winners && winners.msStyle) { %>
+            <img src="<%= winners.msStyle.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.msStyle.name %>">
+            <h3><%= winners.msStyle.name %></h3>
+            <p><%= winners.msStyle.description %></p>
+            <div class="vote-count"><%= winners.msStyle.styleVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+        <!-- MR. POPULAR -->
+        <div class="winner-card">
+          <span class="badge">Popular</span>
+          <div class="award-title">🌟 Mr. Popular</div>
+          <% if (winners && winners.mrPopular) { %>
+            <img src="<%= winners.mrPopular.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.mrPopular.name %>">
+            <h3><%= winners.mrPopular.name %></h3>
+            <p><%= winners.mrPopular.description %></p>
+            <div class="vote-count"><%= winners.mrPopular.boyPopularVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+        <!-- MS. POPULAR -->
+        <div class="winner-card">
+          <span class="badge">Popular</span>
+          <div class="award-title">🌟 Ms. Popular</div>
+          <% if (winners && winners.msPopular) { %>
+            <img src="<%= winners.msPopular.photo %>" onerror="this.onerror=null; this.src='https://via.placeholder.com/150';" alt="<%= winners.msPopular.name %>">
+            <h3><%= winners.msPopular.name %></h3>
+            <p><%= winners.msPopular.description %></p>
+            <div class="vote-count"><%= winners.msPopular.girlPopularVotes %> Votes</div>
+          <% } else { %>
+            <p>No candidate recorded</p>
+          <% } %>
+        </div>
+
+      </div>
+      
+      <!-- Summary -->
+      <section class="summary">
+
+        <div>
+            <i class="ri-bar-chart-box-line summary-icon"></i>
+            <strong><%= Number(totalVotes).toLocaleString() %></strong>
+            <span>Total Votes</span>
+        </div>
+
+        <div>
+            <i class="ri-user-shared-line summary-icon"></i>
+            <strong><%= Number(totalStudentsVoted).toLocaleString() %></strong>
+            <span>Students Voted</span>
+        </div>
+
+        <div>
+            <i class="ri-award-line summary-icon"></i>
+            <strong>6</strong>
+            <span>Categories</span>
+        </div>
+
+        <div>
+            <i class="ri-shield-check-line summary-icon"></i>
+            <strong>100%</strong>
+            <span>Verified</span>
+        </div>
+
+      </section>
+      
+      <!-- ACTION BUTTONS -->
+      <div class="actions">
+        <a href="/home" class="btn">Back to Home</a>
+        <button onclick="window.print()" class="btn">Print Results</button>
+      </div>
+
+    <% } else { %>
+      
+      <!-- PENDING STATE -->
+      <div class="pending-results">
+        <div class="lock-icon-container">
+            <i class="fi fi-rs-lock"></i>   
+       </div>
+        <div class="pending-badge">Coming Soon</div>
+        <h2>Results Are Currently Locked</h2>
+        <p>The votes are securely cast and being tallied. Official election outcomes will be revealed here once the voting period concludes and results are published by the administration.</p>
+        
+        <div class="pending-actions">
+          <a href="/home" class="btn"><i class="ri-home-4-line"></i> Back to Home</a>
+        </div>
+      </div>
+
+    <% } %>
+  </main>
+  <script src="../javascript/votelink.js"></script>
+
+</body>
+</html>

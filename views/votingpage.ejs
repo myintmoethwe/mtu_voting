@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Voting Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/image/mtulogo.png" type="image/x-icon">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel="stylesheet" href="../style/votelink.css"> 
+       <style>
+        /* =========================
+            Voting Section
+        ========================= */
+        @font-face { font-family: 'NotoSansMyanmar'; src: url('./font/NotoSansMyanmar') format('truetype'); font-weight: 100 900; font-style: normal; }
+
+        * { font-family: "Segoe UI", Arial, sans-serif; margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { background: #f8f7ff; color: #333; }
+
+        header { text-align: center; padding: 40px 20px; position: relative; overflow: hidden; color: white; background: linear-gradient(135deg, rgba(49,88,172,1) 0%, rgba(65,169,243,1) 34%, rgba(49,88,172,1) 71%, rgba(79,147,241,1) 100%); background-size: 400% 400%; background-blend-mode: overlay; animation: ShineAnimation 4s ease infinite; }
+        header i { font-size: 24px; color: rgb(238, 201, 108); }
+
+        header h1 { font-size: 32px; margin-bottom: 10px; text-shadow: 2px 3px 0px #898999; }
+
+        header p { font-size: 16px; opacity: 0.9; }
+
+        /* Shine Animation Keyframes */
+        @-webkit-keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+        @-moz-keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+        @keyframes ShineAnimation { 0% { background-position: 0 31%; } 50% { background-position: 100% 70%; } 100% { background-position: 0 31%; } }
+
+        .voting-section { width: 100%; max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
+
+        .voting-section h2 { color: #0056b3; text-align: center; font-size: 25px; margin-bottom: 8px; }
+
+        .instruction { text-align: center; color: #777; margin-bottom: 30px; }
+
+        /* =========================
+            Candidate Container (4 Columns for ALL sections)
+        ========================= */
+
+        .candidate-container { display: grid; grid-template-columns: repeat(4, minmax(240px, 1fr)); gap: 20px; }
+
+        /* =========================
+            Candidate Card
+        ========================= */
+
+        .candidate { width: 100%; max-width: 408px; margin: 0 auto; background: #ffffff; border-radius: 24px; padding: 9px; box-shadow: 0 12px 30px rgba(0, 32, 96, 0.12); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+        .candidate:hover { transform: translateY(-5px); box-shadow: 0 16px 35px rgba(0, 32, 96, 0.18); }
+
+        .card-img-container { width: 100%; background-color: #ffffff; padding: 0; border-radius: 18px; text-decoration: none; overflow: hidden; position: relative; margin-bottom: 14px; box-shadow: 0 6px 16px rgba(0, 32, 96, 0.08); }
+
+        .candidate img { width: 100%; height: 200px; display: block; border-radius: 18px; object-fit: cover; margin-bottom: 0; }
+
+        .card-tag { color: #1e40af; font-weight: 600; font-size: 0.85rem; background: #dbeafe; position: absolute; top: 6px; left: 6px; padding: 6px 16px; display: flex; align-items: center; justify-content: center; border-radius: 20px; box-shadow: 0 2px 8px rgba(0, 32, 96, 0.15); z-index: 2; }
+
+        .card-header-row { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 10px; padding: 0 4px; }
+
+        .candidate h3 { font-size: 18px; font-weight: 700; color: #1e293b; margin: 0; }
+
+        .candidate p, .candidate .name.major { font-size: 13px; color: #64748b; font-weight: 500; margin-bottom: 16px; text-align: left; padding: 0 4px; }
+
+        .candidateid { font-size: 12px; color: #64748b; font-weight: 600; }
+
+        /* =========================
+            Buttons Group in Column Direction & 8px Radius
+        ========================= */
+
+        .option-buttons { display: flex; flex-direction: column; gap: 13px; margin: 0 10px 10px 10px; }
+
+        .select-btn { width: 100%; padding: 10px 8px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; color: #1e40af; background: #f4f4f4; border: 2px solid #c4deff; position: relative; overflow: hidden; transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; box-shadow: 0 4px 9px 0px rgba(0, 0, 0, 0.1); -webkit-tap-highlight-color: transparent; }
+
+        .select-btn:hover { background: #bfdbfe; border-color: #93c5fd; }
+
+        .select-btn.selected { transform: none; color: #fff !important; border-color: transparent; background: linear-gradient(135deg, rgba(49,88,172,1) 0%, rgba(65,169,243,1) 34%, rgba(49,88,172,1) 71%, rgba(79,147,241,1) 100%); background-size: 400% 400% !important; animation: ShineAnimation 3s ease infinite !important; }
+
+        .select-btn::after { content: "✓"; position: absolute; right: 15px; opacity: 0; transform: scale(0.5); transition: opacity 0.2s ease, transform 0.2s ease; }
+
+        .select-btn.selected::after { opacity: 1; transform: scale(1); }
+
+        .submit-area { text-align: center; margin: 30px 0 60px; }
+
+        .submit-btn { width: 300px; padding: 16px; border: none; border-radius: 12px; background: #0066ff; color: #fff; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+
+        .submit-btn:hover { background: #0056b3; transform: translateY(-2px); }
+
+        #error-message { color: #d33; margin-bottom: 15px; font-size: 14px; }
+
+        /* Modal Overlay Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+
+        .modal-content { background: #fff; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+
+        .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b; }
+
+        .modal-header-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 20px; text-align: center; }
+
+        .modal-img-container { position: relative; width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+
+        #modal-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .modal-details-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .modal-info-item { display: flex; align-items: center; gap: 15px; background: #f8f7ff; padding: 12px 15px; border-radius: 10px; }
+
+        .modal-info-item i { font-size: 20px; color: #0056b3; }
+
+        .modal-info-content label { display: block; font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
+
+        .modal-info-content span { font-size: 14px; color: #1e293b; font-weight: 600; }
+
+        .card-tag { text-transform: uppercase;}
+        
+        /* Read-Only Notice Banner Style */
+        .readonly-banner {
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            border-bottom: 1px solid #bfdbfe;
+            display: none;
+            font-size: 15px;
+        }
+
+        /* =========================
+            Responsive Breakpoints
+        ========================= */
+
+        @media (max-width: 1200px) { .candidate-container { grid-template-columns: repeat(2, minmax(280px, 1fr)); } }
+
+        @media (max-width: 750px) {
+             .voting-section { padding: 25px 15px; } 
+             .candidate-container { grid-template-columns: repeat(1, minmax(280px, 1fr)); gap: 38px; } 
+             .candidate img { height: 185px; } 
+             .candidate { max-width: 340px; padding: 10px; } 
+             .option-buttons { margin: 0 16px 10px 16px; } 
+             .card-header-row { margin: 7px 10px; } header h1 { font-size: 22px; } header p { font-size: 13px; } 
+             .voting-section h2 { font-size: 22px; } 
+             .submit-btn { padding: 12px; } 
+             .nav-brand { gap: 5px; font-size: 15px; } }
+
+              @media (max-width: 360px) {
+                .modal-content{  width: 100%;  padding: 20px;}
+                .modal-img-container {height: 148px;}
+                .modal-header-title { font-size: 16px;}
+                .modal-header-title{    margin-bottom: 6px;}
+                .modal-info-item{padding: 5px 15px;}
+                .modal-info-content span {  font-size: 12px;}
+                .modal-details-list {gap:8px;}
+                .modal-box {
+                    width: calc(100% - 8px);
+                    max-width: 100%;
+                    margin: 0 auto;
+                }
+              }
+    </style>
+</head>
+
+<body data-has-voted="<%= locals.hasVoted ? 'true' : 'false' %>">
+    <div id="readOnlyBanner" class="readonly-banner">
+        <i class="ri-eye-line"></i> You are viewing this ballot in Read-Only Mode (Your vote has already been recorded).
+    </div>
+
+     <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="/image/mtulogo.png" alt="MTU Logo">
+            <span>MTU Voting System</span>
+        </a>
+        
+        <button class="nav_toggle" id="nav_toggle" onclick="toggleMenu()">
+            <i class="ri-menu-line" id="menu-icon"></i>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="/home"><i class="ri-home-line"></i> Home</a>
+            <a href="/votingpage" class="active"><i class="ri-chat-poll-line"></i> Voting</a>
+            <a href="/results"><i class="ri-article-line"></i> Results</a>
+            <a href="./userlogin"><i class="ri-contacts-line"></i> Login</a>
+        </div>
+    </nav>
+    <header>
+        <h1> King & Queen Selection</h1>
+        <p>Choose your favorite King and Queen</p>
+    </header>
+
+   <main>
+<form action="/api/vote" method="POST" id="voteForm" onsubmit="return validateAndSubmit(event)">
+        <input type="hidden" name="kingId" id="input-king">
+        <input type="hidden" name="mrSmartId" id="input-smart">
+        <input type="hidden" name="mrPopularId" id="input-b-popular">
+        <input type="hidden" name="queenId" id="input-queen">
+        <input type="hidden" name="msStyleId" id="input-style">
+        <input type="hidden" name="msPopularId" id="input-g-popular">
+
+        <section class="voting-section">
+            <h2>Select Boy Awards</h2>
+            <p class="instruction">
+                Please choose your favourite candidates for each title.
+            </p>
+
+            <div class="candidate-container">
+                <% participants.filter(p => p.gender === 'boy').forEach(p => { %>
+                    <div class="candidate" onclick="openModal(this)" 
+                        data-id="Candidate C-<%= String(p.id).padStart(2, '0') %>"
+                        data-name="<%= p.name %>" 
+                        data-major="<%= p.major || p.description || 'Engineering' %>"
+                        data-hobby="<%= p.hobby || 'Not specified' %>" 
+                        data-place="<%= p.hometown || 'Not specified' %>">
+                        <div>
+                            <div class="card-img-container">
+                                <img src="<%= p.photo %>" alt="Candidate Photo">
+                                <div class="card-tag"><%= p.tag || p.major || p.description %></div>
+                            </div>
+                            <div class="card-header-row">
+                                <h3 class="card-title"><%= p.name %></h3>
+                                <span class="candidateid">Candidate C-<%= String(p.id).padStart(2, '0') %></span>                    
+                            </div>
+                        </div>
+
+                        <div class="option-buttons" onclick="event.stopPropagation()"> 
+                            <button type="button" class="select-btn king-btn" onclick="selectCandidate(this, 'king', '<%= p.id %>')">King</button>
+                            <button type="button" class="select-btn smart-btn" onclick="selectCandidate(this, 'smart', '<%= p.id %>')">Smart</button>
+                            <button type="button" class="select-btn b-popular-btn" onclick="selectCandidate(this, 'b-popular', '<%= p.id %>')">Popular</button>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+
+        <section class="voting-section">
+            <h2>Select Girl Awards</h2>
+            <p class="instruction">
+                Please choose your favourite candidates for each title.
+            </p>
+
+            <div class="candidate-container">
+                <% participants.filter(p => p.gender === 'girl').forEach(p => { %>
+                    <div class="candidate" onclick="openModal(this)" 
+                        data-id="Candidate C-<%= String(p.id).padStart(2, '0') %>" 
+                        data-name="<%= p.name %>" 
+                        data-major="<%= p.major || p.description || 'Engineering' %>"
+                        data-hobby="<%= p.hobby || 'Not specified' %>" 
+                        data-place="<%= p.hometown || 'Not specified' %>">
+                        <div>
+                            <div class="card-img-container">
+                                <% 
+                                let imagePath = p.photo;
+                                if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) {
+                                    imagePath = '/uploads/' + imagePath;
+                                }
+                                %>
+                                <img src="<%= p.photo %>" alt="<%= p.name %>">
+                                <div class="card-tag"><%= p.tag || p.major || p.description || 'Engineering' %></div>
+                            </div>
+                            <div class="card-header-row">
+                                <h3 class="card-title"><%= p.name %></h3>
+                                <span class="candidateid">Candidate C-<%= String(p.id).padStart(2, '0') %></span>
+                            </div>
+                        </div>
+
+                        <div class="option-buttons" onclick="event.stopPropagation()">
+                            <button type="button" class="select-btn queen-btn" onclick="selectCandidate(this, 'queen', '<%= p.id %>')">Queen</button>
+                            <button type="button" class="select-btn style-btn" onclick="selectCandidate(this, 'style', '<%= p.id %>')">Style</button>
+                            <button type="button" class="select-btn g-popular-btn" onclick="selectCandidate(this, 'g-popular', '<%= p.id %>')">Popular</button>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+
+        <div class="submit-area" id="submitAreaContainer">
+            <p id="error-message"></p>
+            <button type="submit" class="submit-btn" id="confirmVoteBtn">
+                Confirm Vote
+            </button>
+        </div>
+
+      </form>
+    </main>
+
+    <div id="candidateModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-header-title">Candidate Profile</h2>
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="Candidate Image">
+                <div id="modal-tag" class="card-tag"></div>
+            </div>
+            
+            <div class="modal-details-list">
+                <div class="modal-info-item">
+                    <i class="ri-user-line"></i>
+                    <div class="modal-info-content">
+                        <label>Name</label>
+                        <span id="modal-name"></span>
+                    </div>
+                </div>
+
+                <div class="modal-info-item">
+                    <i class="ri-book-open-line"></i>
+                    <div class="modal-info-content">
+                        <label>Candidate ID & Major</label>
+                        <span id="modal-id"></span>
+                    </div>
+                </div>
+
+                <div class="modal-info-item">
+                    <i class="ri-heart-3-line"></i>
+                    <div class="modal-info-content">
+                        <label>Hobby</label>
+                        <span id="modal-hobby">Coding</span>
+                    </div>
+                </div>
+
+                <div class="modal-info-item">
+                    <i class="ri-home-line"></i>
+                    <div class="modal-info-content">
+                        <label>Home Town</label>
+                        <span id="modal-place">Mandalay</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <script src="../javascript/votelink.js"></script>
+   
+</body>
+</html>

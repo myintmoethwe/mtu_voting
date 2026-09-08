@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/image/mtulogo.png" type="image/x-icon">
+    <title>MTU Voting System</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+        }
+        h2 { color: #0f172a; margin-bottom: 8px; font-size: 22px; }
+        .system-title { 
+            color: #2563eb; 
+            font-size: 15px; 
+            font-weight: 700; 
+            margin-bottom: 25px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .qr-box {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+        @media (max-width: 480px) {
+            body { padding: 12px; align-items: center; }
+            .card { padding: 24px 16px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+            h2 { font-size: 20px; }
+            .system-title { font-size: 12px; margin-bottom: 16px; letter-spacing: 0.8px; }
+            .qr-box { padding: 10px; border-radius: 12px; }
+            .qr-box img { max-width: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2> Scan to Vote</h2>
+        <div class="system-title">Welcome to MTU Voting System</div>
+        
+        <div class="qr-box">
+            <img src="<%= qrCode %>" alt="Voting QR Code" width="230" height="230">
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        socket.on('redirect-laptop', () => {
+            window.location.href = '/index';
+        });
+    </script>
+</body>
+</html>

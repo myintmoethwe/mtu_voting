@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - King & Queen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-straight/css/uicons-regular-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/4.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+    <link rel="stylesheet" href="../style/admin_dashboard.css">
+    <style>
+        /* Hide all page sections by default, show active */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+<aside class="sidebar" style=" background: linear-gradient(135deg, rgba(49, 88, 172, 1) 0%, rgba(65, 169, 243, 1) 34%, rgba(49, 88, 172, 1) 71%, rgba(79, 147, 241, 1) 100%) !important;
+    background-size: 400% 400% !important;
+    animation: ShineAnimation 4s ease infinite !important;">
+        <div class="logo">
+            
+                <img src="/image/mtulogo.png" class="sidebar-logo"
+                 alt="Mandalay Technological University Logo">
+            
+            <h2>King & Queen</h2>
+        </div>
+
+        <nav class="space-y-1">
+            <!-- Dashboard Link -->
+            <a href="#dashboard-page" onclick="showPage('dashboard', this); return false;" class="sidebar-link active flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium">
+                <i class="fa-solid fa-chart-pie w-5"></i> 
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Candidates Link -->
+            <a href="#candidates-page" onclick="showPage('candidates', this); return false;" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium">
+                <i class="fa-solid fa-users w-5"></i> 
+                <span>Candidates</span>
+            </a>
+
+            <!-- Votes Link -->
+            <a href="#vote-page" onclick="showPage('vote', this); return false;" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium">
+                <i class="fa-solid fa-check-to-slot w-5"></i> 
+                <span>Votes</span>
+            </a>
+
+            <!-- Results Link -->
+            <a href="#result-page" onclick="showPage('result', this); return false;" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium">
+                <i class="fa-solid fa-trophy w-5"></i> 
+                <span>Results</span>
+            </a>
+
+            <!-- Settings Link -->
+            <a href="#setting-page" onclick="showPage('setting', this); return false;" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium">
+                <i class="fa-solid fa-gear w-5"></i> 
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <a href="#" class="logout">
+            <i class="fi fi-rs-user-logout"></i>
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- Dashboard -->
+
+        <section id="dashboard-page" class="page-section">
+            <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back, Admin!</p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Admin</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+                <!-- STATISTICS -->
+            <section class="statistics">
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                    <i class="fi fi-rr-users"></i>
+                    </div>
+                    <div>
+                        <p>Total Voters</p>
+                        <h2><%= stats ? stats.total_voters : 0 %></h2>            
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-vote-yea"></i>
+                    </div>
+                    <div>
+                        <p>Total Votes Cast</p>
+                        <h2><%= stats ? stats.total_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-premium-account"></i>
+                    </div>
+                    <div>
+                        <p>Top King Votes</p>
+                        <h2><%= stats ? stats.total_king_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-premium-account"></i>
+                    </div>
+                    <div>
+                        <p>Top Queen Votes</p>
+                    <h2><%= stats ? stats.total_queen_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-badget-check-alt"></i>
+                    </div>
+                    <div>
+                        <p>Top Smart Votes</p>
+                        <h2><%= stats ? stats.total_smart_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-badget-check-alt"></i>
+                    </div>
+                    <div>
+                        <p>Top Style Votes</p>
+                        <h2><%= stats ? stats.total_style_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-badget-check-alt"></i>
+                    </div>
+                    <div>
+                        <p>Top Boy Popular Votes</p>
+                        <h2><%= stats ? stats.total_boy_popular_votes : 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fi fi-rr-badget-check-alt"></i>
+                    </div>
+                    <div>
+                        <p>Top Girl Popular Votes</p>
+                        <h2><%= stats ? stats.total_girl_popular_votes : 0 %></h2>
+                    </div>
+                </div>
+
+            </section>
+
+
+        <!-- VOTING STATUS -->
+        <section class="status-card">
+
+            <div>
+
+                <h2>Voting Status</h2>
+
+                <p>
+                    King & Queen Selection is currently
+                    <strong>OPEN</strong>.
+                </p>
+
+            </div>
+
+            <span class="status open">
+                ● LIVE
+            </span>
+
+        </section>
+
+
+        <!-- CONTENT GRID -->
+        <section class="content-grid">
+
+            <!-- KING RESULTS -->
+            <div class="result-card">
+                <div class="card-header"> 
+                    <h2>
+                        <i class="fi fi-br-rank"></i>
+                        
+                        King Results</h2>
+                    <a href="#" onclick="showPage(event, 'result')">View All</a>
+                </div>
+
+                <% if (locals.kings && kings.length > 0) { %>
+                    <% kings.forEach((king, index) => { %>
+                        <div class="candidate-row">
+                            <div class="candidate-info">
+                                <div class="rank"><%= index + 1 %></div>
+                                <img src="<%= king.photo %>" alt="<%= king.name %>">
+                                <div>
+                                    <strong><%= king.name %></strong>
+                                    <small>K-0<%= king.id %></small>
+                                </div>
+                            </div>
+                            <div class="vote-count">
+                                <strong><%= king.kingVotes %></strong>
+                                <small>votes</small>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="candidate-row">
+                        <div class="candidate-info">
+                            <div>
+                                <strong>No King Candidates Found</strong>
+                                <small>-</small>
+                            </div>
+                        </div>
+                        <div class="vote-count">
+                            <strong>0</strong>
+                            <small>votes</small>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- QUEEN RESULTS -->
+            <div class="result-card">
+                <div class="card-header">
+                    <h2>
+                        <i class="fi fi-br-rank"></i>
+                        Queen Results</h2>
+                    <a href="#" onclick="showPage(event, 'result')">View All</a>
+                </div>
+
+                <% if (locals.queens && queens.length > 0) { %>
+                    <% queens.forEach((queen, index) => { %>
+                        <div class="candidate-row">
+                            <div class="candidate-info">
+                                <div class="rank"><%= index + 1 %></div>
+                                <img src="<%= queen.photo %>" alt="<%= queen.name %>">
+                                <div>
+                                    <strong><%= queen.name %></strong>
+                                    <small>Q-0<%= queen.id %></small>
+                                </div>
+                            </div>
+                            <div class="vote-count">
+                                <strong><%= queen.queenVotes %></strong>
+                                <small>votes</small>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="candidate-row">
+                        <div class="candidate-info">
+                            <div>
+                                <strong>No Queen Candidates Found</strong>
+                                <small>-</small>
+                            </div>
+                        </div>
+                        <div class="vote-count">
+                            <strong>0</strong>
+                            <small>votes</small>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <section class="quick-actions">
+
+            <h2>Quick Actions</h2>
+
+            <div class="action-container">
+
+            <a href="javascript:void(0)" class="action-card" onclick="openAddCandidateModal()">
+                <span>➕</span>
+                <div>
+                    <strong>Add Candidate</strong>
+                    <small>Add a new King or Queen</small>
+                </div>
+            </a>
+
+            <a href="#result-page" class="action-card" onclick="showPage('result', this)">
+                <span>📊</span>
+                <div>
+                    <strong>View Results</strong>
+                    <small>Check complete voting results</small>
+                </div>
+            </a>
+
+            <a href="#setting-page" class="action-card" onclick="showPage('setting', this)">
+                <span>⚙️</span>
+                <div>
+                    <strong>Voting Settings</strong>
+                    <small>Manage voting period</small>
+                </div>
+            </a>
+
+        </div>
+
+        </section>
+        </section>
+
+
+     
+    <!-- CANDIDATES PAGE -->
+        <section id="candidates-page" class="page-section">
+            <div class="page-header">
+                <div>
+                    <h1>Candidates</h1>
+                    <p>Manage King and Queen candidates</p>
+                </div>
+                <!-- Trigger button for your modal box (ensure you have JS function like openCandidateModal() hooked up if needed) -->
+                <button class="add-btn" onclick="openCandidateModal()">
+                    + Add Candidate
+                </button>
+            </div>
+
+            <!-- FILTER -->
+            <div class="filter-box">
+                <div class="search-box">
+                    🔍
+                    <input type="text" placeholder="Search candidate..." onkeyup="searchCandidates()" id="searchInput">
+                </div>
+
+                <select id="categoryFilter" onchange="filterCandidates()">
+                    <option value="all">All Categories</option>
+                    <option value="Boy">Boy</option>
+                    <option value="Girl">Girl</option>
+                </select>
+
+                
+            </div>
+
+            <!-- CANDIDATE TABLE -->
+           <div class="candidate-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Candidate</th>
+                    <th>Candidate_no</th>
+                    <th>Votes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="candidateTable">
+                <% if (typeof participants !== 'undefined' && participants.length > 0) { %>
+                    <% participants.forEach((p, index) => { %>
+                        <tr data-category="<%= p.gender.toLowerCase() %>">
+                            <td><%= index + 1 %></td>
+                            <td>
+                                <div class="candidate-info">
+                                    <% 
+                                        let imagePath = p.photo;
+                                        if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) {
+                                            imagePath = '/uploads/' + imagePath;
+                                        }
+                                    %>
+                                    <img src="<%= p.photo %>" alt="<%= p.name %>">
+                                    <div>
+                                        <strong><%= p.name %></strong>
+                                        <small><%= p.major || p.description %></small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge">
+                                    C-<%= String(index + 1).padStart(2, '0') %>
+                                </span>
+                            </td>
+                            <td><strong><%= p.vote || 0 %></strong></td>
+                            <td class="action-cell">
+                                <div class="action-buttons">
+                                    <button type="button" class="edit-btn" onclick="toggleEditRow('<%= p.id %>')">Edit</button>
+                                    <a href="/admin/delete/<%= p.id %>?section=candidates" class="delete-btn" onclick="return confirm('Are you sure you want to delete this candidate?');">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="edit-row-<%= p.id %>" class="edit-panel-row">
+                            <td colspan="5" style="padding: 0;">
+                                <div class="edit-panel-content">
+                                    <form action="/admin/update/<%= p.id %>?section=candidates" method="POST" enctype="multipart/form-data">
+                                        <h4 style="margin-bottom: 12px; color: #4b2e83; font-size: 15px;">Edit Candidate: <%= p.name %></h4>
+                                        <div class="edit-form-grid">
+                                            <input type="text" name="name" value="<%= p.name %>" placeholder="Name" required />
+                                            <input type="file" name="photo" />
+                                            <input type="text" name="description" value="<%= p.major || p.description %>" placeholder="Major / Description" />
+                                            <select name="gender" required>
+                                                <option value="boy" <%= p.gender === 'boy' ? 'selected' : '' %>>Boy (King)</option>
+                                                <option value="girl" <%= p.gender === 'girl' ? 'selected' : '' %>>Girl (Queen)</option>
+                                            </select>
+                                            <input type="text" name="hobby" value="<%= p.hobby || '' %>" placeholder="Hobby" />
+                                            <input type="text" name="hometown" value="<%= p.hometown || '' %>" placeholder="Hometown" />
+                                            
+                                            <div class="edit-actions">
+                                                <button type="button" class="btn-cancel" onclick="toggleEditRow('<%= p.id %>')">Cancel</button>
+                                                <button type="submit" class="btn-save">Save Changes</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5">No candidates found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Voter Page -->
+<section id="vote-page" class="page-section">
+
+    <div class="page-header">
+        <h1>Vote Records</h1>
+        <p>View all voting records</p>
+    </div>
+
+    <div class="vote-table-container">
+        <table class="vote-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Voter Email</th>
+                    <th>Voter ID</th>
+                    <th>Vote Status</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+
+           <tbody>
+                <% if (typeof voteRecords !== 'undefined' && voteRecords.length > 0) { %>
+                    <% voteRecords.forEach((record, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= record.email %></td>
+                            <td>V<%= String(record.id).padStart(3, '0') %></td>
+                            <td>
+                                <% if (record.has_voted) { %>
+                                    <span class="status voted">Voted</span>
+                                <% } else { %>
+                                    <span class="status pending">Pending</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%= record.voted_at ? new Date(record.voted_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' %>
+                            </td>
+                            <td>
+                                <%= record.voted_at ? new Date(record.voted_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '-' %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" style="text-align:center;">No voting records found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+      <!-- Result Page -->
+<section id="result-page" class="page-section">
+
+    <div class="page-header">
+        <h1>Voting Results</h1>
+        <p>View the current voting results</p>
+    </div>
+
+    <div class="result-container">
+        <% 
+          const categories = [
+            { key: 'king', title: 'King' },
+            { key: 'queen', title: 'Queen' },
+            { key: 'smart', title: 'Mr. Smart' },
+            { key: 'style', title: 'Ms. Style' },
+            { key: 'boyPopular', title: 'Mr. Popular' },
+            { key: 'girlPopular', title: 'Ms. Popular' }
+          ];
+        %>
+
+        <% categories.forEach(cat => { %>
+            <div class="result-card">
+                <h2><%= cat.title %></h2>
+
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Candidate Name</th>
+                            <th>Total Votes</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (topResults[cat.key] && topResults[cat.key].length > 0) { %>
+                            <% topResults[cat.key].forEach((candidate, index) => { %>
+                                <tr>
+                                    <td>
+                                        <% if (index === 0) { %> 🥇 1
+                                        <% } else if (index === 1) { %> 🥈 2
+                                        <% } else if (index === 2) { %> 🥉 3
+                                        <% } else { %> <%= index + 1 %> <% } %>
+                                    </td>
+                                    <td><%= candidate.name %></td>
+                                    <td><%= candidate.votes %></td>
+                                    <td><%= candidate.percentage %>%</td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #888;">No votes recorded yet</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        <% }) %>
+
+    </div>
+
+</section>
+
+        <!-- Setting page -->
+
+        <section id="setting-page" class="page-section">
+            <form action="/admin/settings" method="POST">
+
+                <div class="page-header">
+                    <h1>Settings</h1>
+                    <p>Manage your voting system settings</p>
+                </div>
+
+                <div class="settings-container">
+
+                        <!-- Main Card Container -->
+                        <!-- Countdown Control Card -->
+                    <div class="settings-card w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/80 rounded-2xl p-4 md:p-5 shadow-xl shadow-sky-900/5 relative flex flex-col justify-between">
+
+                        <!-- Header Section -->
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-sky-700 bg-sky-100 px-2 py-0.5 rounded-full border border-sky-200 mb-1">
+                                    MTU Fresher Welcome
+                                </span>
+
+                                <h1 class="text-lg font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                                    Countdown Control
+                                </h1>
+                            </div>
+
+                            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 flex items-center justify-center shadow-md shadow-sky-500/20 text-white text-base">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                        </div>
+
+
+                        <div class="space-y-3">
+
+                            <!-- Event Schedule Box -->
+                            <div class="bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 transition-all duration-300 hover:border-sky-300">
+
+                                <div class="flex items-center gap-2 text-sky-700 text-[10px] font-bold tracking-wider uppercase mb-2">
+                                    <i class="fa-regular fa-calendar-days text-xs"></i>
+                                    <span>Event Schedule</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2.5">
+
+                                    <!-- Date -->
+                                    <div class="space-y-1">
+                                        <label for="eventDate"
+                                            class="block text-[10px] font-semibold text-slate-600">
+                                            Event Date
+                                        </label>
+
+                                        <input type="date"
+                                            id="eventDate"
+                                            name= "event_date"
+                                            class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+                                    </div>
+
+
+                                    <!-- Start Time -->
+                                    <div class="space-y-1">
+                                        <label for="startTime"
+                                            class="block text-[10px] font-semibold text-slate-600">
+                                            Start Time
+                                        </label>
+
+                                        <input type="time"
+                                            id="startTime"
+                                            name="start_time"
+                                            class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!-- Countdown Duration Box -->
+                            <div class="bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 transition-all duration-300 hover:border-sky-300">
+
+                                <div class="flex items-center gap-2 text-sky-700 text-[10px] font-bold tracking-wider uppercase mb-2">
+                                    <i class="fa-solid fa-stopwatch text-xs"></i>
+                                    <span>Countdown Duration</span>
+                                </div>
+
+                                <div class="space-y-1">
+
+                                    <input type="text"
+                                        id="countdownTime"
+                                        name="duration"
+                                        value="00:05:00"
+                                        maxlength="8"
+                                        placeholder="HH:MM:SS"
+                                        class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-center text-sm font-bold tracking-widest text-sky-700 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+
+                                    <p class="text-[9px] text-slate-400 text-center font-medium">
+                                        Format: HH:MM:SS
+                                    </p>
+
+                                </div>
+                            </div>
+
+
+                            <!-- Action Controls -->
+                            <div class="grid grid-cols-2 gap-2">
+
+                                <!-- Start -->
+                                <button type="button" onclick="startCountdown()"
+                                    class="col-span-2 group relative inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-bold rounded-lg shadow-md shadow-sky-600/20 active:scale-[0.98] transition-all overflow-hidden">
+
+                                    <span class="absolute inset-0 w-full h-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+
+                                    <i class="fa-solid fa-play text-[10px] transition-transform group-hover:scale-110"></i>
+
+                                    <span>Start Countdown</span>
+                                </button>
+
+
+                                <!-- Pause -->
+                                <button type="button" onclick="pauseCountdown()"
+                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                                    <i class="fa-solid fa-pause"></i>
+                                    <span>Pause</span>
+
+                                </button>
+
+
+                                <!-- Resume -->
+                                <button type="button" onclick="resumeCountdown()"
+                                    class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                                    <i class="fa-solid fa-play"></i>
+                                    <span>Resume</span>
+
+                                </button>
+
+
+                                <!-- Reset -->
+                                <button type="button" onclick="resetCountdown()"
+                                    class="col-span-2 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-bold rounded-lg active:scale-[0.98] transition-all">
+
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>Reset Control State</span>
+
+                                </button>
+
+                            </div>
+
+
+                            <!-- Status -->
+                            <div id="status"
+                                class="flex items-center justify-center gap-2 py-2 px-3 bg-sky-50/80 border border-sky-100 rounded-lg text-sky-900 text-[11px] font-semibold tracking-wide transition-all">
+
+                                <i class="fa-solid fa-circle-info text-sky-600"></i>
+
+                                <span>Status: Ready</span>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    
+
+
+                    <!-- Voting Settings -->
+                    <div class="settings-card">
+                        <h2>Voting Settings</h2>
+
+                        <div class="setting-item">
+                            <div>
+                                <h3>One Vote Per Student</h3>
+                                <p>Allow each student to vote only once.</p>
+                            </div>
+
+                            <label class="switch">
+                                <input type="checkbox" id="oneVote" name="one_vote_per_student" <%= settings && settings.one_vote_per_student ? 'checked' : '' %>>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <h3>Show Results</h3>
+                                <p>Allow students to see voting results.</p>
+                            </div>
+
+                            <label class="switch">
+                                <input type="checkbox" id="showResults" name="show_results" <%= settings && settings.show_results ? 'checked' : '' %>>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div>
+                                <h3>Candidate Registration</h3>
+                                <p>Allow candidates to register for the election.</p>
+                            </div>
+
+                            <label class="switch">
+                                <input type="checkbox" id="candidateRegistration" name="candidate_registration" <%= settings && settings.candidate_registration ? 'checked' : '' %>>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- Security Settings -->
+                    <div class="settings-card">
+                        <h2>Security</h2>
+
+                        <div class="form-group">
+                            <label for="adminPassword">Admin Password</label>
+                            <input type="password"
+                                id="adminPassword"
+                                name="admin_password"
+                                placeholder="Enter new password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password"
+                                id="confirmPassword"
+                                name="confirm_password"
+                                placeholder="Confirm new password">
+                        </div>
+                    </div>
+
+
+                    <!-- Save Button -->
+                    <div class="settings-actions">
+                        <button type="submit" class="save-btn">
+                            Save Settings
+                        </button>
+
+                        <button type="reset" class="reset-btn">
+                            Reset
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+        </section>
+       
+
+    </main>
+        <!-- ADD CANDIDATE MODAL -->
+       <div id="candidateModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Candidate</h2>
+                    <button class="close-btn" onclick="closeCandidateModal()">
+                        <i class="fi fi-rs-circle-xmark"></i>
+                    </button>
+                </div>
+
+                <form action="/admin/create?section=candidates" method="POST" enctype="multipart/form-data">                    <div class="form-group">
+                        <label>Candidate Name:</label>
+                        <input type="text" name="name" placeholder="e.g. Kyaw Kyaw" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Major:</label>
+                        <input type="text" name="description" placeholder="e.g. Civil / CEIT" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender:</label>
+                        <select name="gender" required>
+                            <option value="boy">Boy (King, Mr. Smart, Mr. Popular)</option>
+                            <option value="girl">Girl (Queen, Ms. Style, Ms. Popular)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hobby:</label>
+                        <input type="text" name="hobby" placeholder="e.g. Coding">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Home Town:</label>
+                        <input type="text" name="hometown" placeholder="e.g. Mandalay">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Photo:</label>
+                        <input type="file" name="photo" accept="image/*" required>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeCandidateModal()">Cancel</button>
+                        <button type="submit" class="add-btn">Add Candidate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+       <!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: {
+                        50: '#f0f9ff',
+                        100: '#e0f2fe',
+                        500: '#0ea5e9',
+                        600: '#0284c7',
+                        700: '#0369a1',
+                        900: '#0f172a',
+                    }
+                }
+            }
+        }
+    }
+</script>
+ <script src="/socket.io/socket.io.js"></script>
+<script>
+function showPage(page, clickedLink) {
+    // Hide all page sections
+    document.querySelectorAll(".page-section").forEach(section => {
+        section.style.display = "none";
+    });
+
+    // Show the target section if it exists
+    const targetPage = document.getElementById(page + "-page");
+    if (targetPage) {
+        targetPage.style.display = "block";
+    }
+
+    // Remove active class from all sidebar links
+    document.querySelectorAll(".sidebar a").forEach(link => {
+        link.classList.remove("active");
+    });
+
+    // Add active class to the current sidebar link
+    const matchingSidebarLink = document.querySelector(`.sidebar a[href="#${page}-page"]`) || clickedLink;
+    if (matchingSidebarLink) {
+        matchingSidebarLink.classList.add("active");
+    }
+
+    // Save current active tab to localStorage so it remembers the tab on standard refresh
+    localStorage.setItem('activeAdminTab', page);
+}
+// SETTINGS MANAGEMENT
+function saveSettings() {
+    const electionName = document.getElementById("electionName").value;
+    const status = document.getElementById("electionStatus").value;
+    const oneVote = document.getElementById("oneVote").checked;
+    const showResults = document.getElementById("showResults").checked;
+
+    console.log("Election:", electionName);
+    console.log("Status:", status);
+    console.log("One Vote:", oneVote);
+    console.log("Show Results:", showResults);
+
+    alert("Settings saved successfully!");
+}
+
+function resetSettings() {
+    document.getElementById("electionName").value = "King & Queen Voting 2026";
+    document.getElementById("electionStatus").value = "open";
+    document.getElementById("oneVote").checked = true;
+    document.getElementById("showResults").checked = false;
+    document.getElementById("candidateRegistration").checked = false;
+}
+
+// CANDIDATE FILTERING & SEARCH
+function filterCandidates() {
+    applyFilters();
+}
+
+function searchCandidates() {
+    applyFilters();
+}
+
+function applyFilters() {
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    
+    if (!searchInput || !categoryFilter) return;
+
+    const query = searchInput.value.toLowerCase().trim();
+    const filter = categoryFilter.value.toLowerCase().trim();
+    
+    document.querySelectorAll("#candidateTable tr[data-category]").forEach(row => {
+        const cat = row.getAttribute("data-category").toLowerCase().trim();
+        const nameElement = row.querySelector(".candidate-info strong");
+        const candidateName = nameElement ? nameElement.textContent.toLowerCase() : "";
+        
+        const matchesCategory = filter === "all" || cat === filter;
+        const matchesSearch = query === "" || candidateName.includes(query);
+        
+        const shouldShow = matchesCategory && matchesSearch;
+        row.style.display = shouldShow ? "" : "none";
+
+        const candidateId = row.querySelector('.edit-btn')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        const editRow = candidateId ? document.getElementById(`edit-row-${candidateId}`) : null;
+        if (!shouldShow && editRow) editRow.style.display = "none";
+    });
+}
+
+// EDIT ROW TOGGLE
+function toggleEditRow(id) {
+    const row = document.getElementById(`edit-row-${id}`);
+    if (row.classList.contains('active')) {
+        row.classList.remove('active');
+    } else {
+        document.querySelectorAll('.edit-panel-row').forEach(r => r.classList.remove('active'));
+        row.classList.add('active');
+    }
+}
+
+// COUNTDOWN CONTROLS
+function setStatus(text) {
+    const statusEl = document.getElementById("status");
+    if (statusEl) {
+        statusEl.innerHTML = `
+            <i class="fa-solid fa-circle-info text-sky-600"></i>
+            <span>${text}</span>
+        `;
+    }
+}
+
+async function startCountdown(event) {
+    const submitButton = event ? event.target : null;
+
+    const eventDateEl = document.getElementById('eventDate');
+    const startTimeEl = document.getElementById('startTime');
+    const countdownTimeEl = document.getElementById('countdownTime');
+
+    if (!eventDateEl || !startTimeEl || !countdownTimeEl) {
+        alert("Required form elements are missing from the page.");
+        return;
+    }
+
+    const eventDate = eventDateEl.value;
+    const startTime = startTimeEl.value;
+    const countdownTime = countdownTimeEl.value;
+
+    if (!eventDate || !startTime) {
+        alert("Please select both the Event Date and Start Time.");
+        return;
+    }
+
+    if (!countdownTime || countdownTime.split(':').length !== 3) {
+        alert("Please provide a valid countdown time in HH:MM:SS format.");
+        return;
+    }
+
+    const targetDateTime = new Date(`${eventDate}T${startTime}`).getTime();
+    if (isNaN(targetDateTime)) {
+        alert("Invalid date or time format.");
+        return;
+    }
+    
+    const parts = countdownTime.split(':');
+    const hours = parseInt(parts[0], 10) || 0;
+    const minutes = parseInt(parts[1], 10) || 0;
+    const seconds = parseInt(parts[2], 10) || 0;
+    const durationMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+
+    const payload = {
+        target_time: targetDateTime,
+        remaining: durationMs,
+        duration: durationMs,
+        countdown_status: "running"
+    };
+
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+        const response = await fetch('/admin/update-countdown', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server returned status ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            if (typeof setStatus === 'function') {
+                setStatus("Status: Running");
+            }
+            alert("Countdown started successfully and saved to database!");
+        } else {
+            alert(result.error || "Failed to save countdown.");
+        }
+    } catch (err) {
+        console.error("Error:", err);
+        alert("Failed to connect to server or process response.");
+    } finally {
+        if (submitButton) submitButton.disabled = false;
+    }
+}
+
+async function pauseCountdown() {
+    try {
+        const response = await fetch("/admin/pause", { method: "POST" });
+        const data = await response.json();
+
+        if (data.success) {
+            setStatus("Status: Paused");
+        } else {
+            alert(data.message || "Cannot pause countdown.");
+        }
+    } catch (error) {
+        alert("Failed to connect to server.");
+    }
+}
+
+async function resumeCountdown() {
+    try {
+        const response = await fetch("/admin/resume", { method: "POST" });
+        const data = await response.json();
+
+        if (data.success) {
+            setStatus("Status: Running");
+        } else {
+            alert(data.message || "Cannot resume countdown.");
+        }
+    } catch (error) {
+        alert("Failed to connect to server.");
+    }
+}
+
+async function resetCountdown() {
+    if (!confirm("Are you sure you want to reset the countdown?")) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/admin/reset", { method: "POST" });
+        const data = await response.json();
+
+        if (data.success) {
+            setStatus("Status: Reset");
+            if (document.getElementById("eventDate")) document.getElementById("eventDate").value = "";
+            if (document.getElementById("startTime")) document.getElementById("startTime").value = "";
+            if (document.getElementById("countdownTime")) document.getElementById("countdownTime").value = "00:05:00";
+        } else {
+            alert("Failed to reset countdown.");
+        }
+    } catch (error) {
+        alert("Failed to connect to server.");
+    }
+}
+
+// LIVE SYNC VIA SOCKET.IO (Replaces polling interval)
+document.addEventListener("DOMContentLoaded", () => {
+    const socket = io();
+
+    socket.on("countdownUpdated", (data) => {
+        console.log("Admin real-time countdown update received:", data);
+
+        if (!data || !data.target_time) return;
+
+        const now = new Date().getTime();
+        const targetTime = new Date(data.target_time).getTime();
+        const timeLeft = targetTime - now;
+
+        const statusLower = (data.countdown_status || "").toLowerCase();
+
+        if (statusLower === 'running') {
+            if (timeLeft > 0) {
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                const countdownElement = document.getElementById('countdown-display');
+                if (countdownElement) {
+                    countdownElement.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }
+                
+                const statusEl = document.getElementById("status");
+                if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-info text-sky-600"></i><span>Status: Running</span>';
+            } else {
+                updateUIToRunningState(data.duration);
+            }
+        } else if (statusLower === 'paused') {
+            displayPausedState();
+        } else if (statusLower === 'reset') {
+            displayResetState();
+        }
+    });
+});
+
+function updateUIToRunningState(duration) {
+    const countdownElement = document.getElementById('countdown-display');
+    if (countdownElement) {
+        countdownElement.innerText = "Voting Active!";
+    }
+}
+
+function displayPausedState() {
+    const statusEl = document.getElementById('status');
+    if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-info text-amber-600"></i><span>Status: Paused</span>';
+}
+
+function displayResetState() {
+    const statusEl = document.getElementById('status');
+    if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-info text-rose-600"></i><span>Status: Reset</span>';
+}
+
+</script>
+<script src="../javascript/admin_dashboard.js"></script>
+
+</body>
+</html>

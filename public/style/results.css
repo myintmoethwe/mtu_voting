@@ -1,0 +1,952 @@
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #202633;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.results-page {
+    width: 100%;
+    height: 100vh;
+
+    padding: 14px 4vw;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.page-header {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+
+/* University */
+
+.university {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+}
+
+.university img {
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+.university div {
+    text-align: left;
+}
+
+.university h2 {
+    font-size: 14px;
+    font-weight: 700;
+
+    color: #252b38;
+}
+
+.university p {
+    margin-top: 2px;
+
+    font-size: 8px;
+
+    color: #858c99;
+}
+
+
+/* Result status */
+
+.result-status {
+    display: inline-block;
+
+    padding: 4px 11px;
+
+    border-radius: 20px;
+
+    background: #e9efff;
+
+    color: #5268d8;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: .6px;
+}
+
+
+/* Main heading */
+
+.page-header h1 {
+    margin-top: 5px;
+
+    color: #202633;
+
+    font-size: clamp(27px, 3.5vw, 40px);
+
+    font-weight: 800;
+
+    letter-spacing: -.8px;
+}
+
+.description {
+    margin-top: 3px;
+
+    color: #858c99;
+
+    font-size: 8px;
+}
+
+
+/* =====================================================
+   RESULTS GRID
+===================================================== */
+
+.results-grid {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 12px auto 0;
+
+    flex: 1;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    grid-template-rows: repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+/* =====================================================
+   RESULT CARD
+===================================================== */
+
+.result-card {
+    --accent: #5b6fd8;
+
+    position: relative;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding: 11px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ef;
+
+    border-radius: 13px;
+
+    border-top: 3px solid var(--accent);
+
+    box-shadow:
+        0 4px 14px rgba(36, 44, 65, .055);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 9px 24px rgba(36, 44, 65, .10);
+}
+
+
+/* =====================================================
+   CARD COLORS
+===================================================== */
+
+.king {
+    --accent: #d89b26;
+}
+
+.queen {
+    --accent: #d95b8c;
+}
+
+.smart {
+    --accent: #4285d4;
+}
+
+.style {
+    --accent: #765ec7;
+}
+
+.mr-popular {
+    --accent: #d85a5a;
+}
+
+.ms-popular {
+    --accent: #d65383;
+}
+
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    color: var(--accent);
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
+}
+
+.card-header small {
+    color: #a1a6b0;
+
+    font-size: 7px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   CANDIDATE
+===================================================== */
+
+.candidate {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+/* Candidate image */
+
+.candidate-photo {
+    position: relative;
+
+    width: 57px;
+    height: 57px;
+
+    flex-shrink: 0;
+}
+
+.candidate-photo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 2px solid #ffffff;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, .12);
+}
+
+
+/* Verified icon */
+
+.candidate-photo b {
+    position: absolute;
+
+    right: -2px;
+    bottom: 0;
+
+    width: 17px;
+    height: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #20a568;
+
+    color: white;
+
+    border: 2px solid white;
+
+    font-size: 7px;
+}
+
+
+/* Candidate information */
+
+.candidate-info {
+    min-width: 0;
+}
+
+.candidate-info h2 {
+    color: #252b38;
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.candidate-info p {
+    margin-top: 2px;
+
+    color: #8b919d;
+
+    font-size: 6.5px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   VOTE COUNT
+===================================================== */
+
+.vote-count {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 3px;
+
+    margin-top: 4px;
+}
+
+.vote-count strong {
+    color: var(--accent);
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+.vote-count span {
+    color: #969ba5;
+
+    font-size: 6px;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.vote-progress {
+    margin-top: 7px;
+}
+
+.vote-progress > div:first-child {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 3px;
+
+    color: #999faa;
+
+    font-size: 5.5px;
+}
+
+.vote-progress b {
+    color: var(--accent);
+
+    font-size: 6px;
+}
+
+
+/* Progress background */
+
+.bar {
+    width: 100%;
+    height: 4px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #eceef3;
+}
+
+
+/* Progress */
+
+.bar span {
+    display: block;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--accent);
+
+    animation: progress .9s ease;
+}
+
+@keyframes progress {
+
+    from {
+        width: 0;
+    }
+}
+
+
+/* =====================================================
+   WINNER
+===================================================== */
+
+.winner {
+    align-self: flex-start;
+
+    margin-top: 5px;
+
+    padding: 3px 8px;
+
+    border-radius: 20px;
+
+    background: #fff6d9;
+
+    color: #997100;
+
+    font-size: 5.5px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 8px auto 0;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 8px;
+}
+
+.summary div {
+    padding: 6px 8px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ef;
+
+    border-radius: 9px;
+}
+
+.summary strong {
+    display: block;
+
+    color: #303746;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.summary span {
+    display: block;
+
+    margin-top: 1px;
+
+    color: #9298a3;
+
+    font-size: 5.5px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    flex-shrink: 0;
+
+    padding-top: 5px;
+
+    text-align: center;
+
+    color: #969ca7;
+
+    font-size: 6px;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (min-width: 601px) and (max-width: 1024px) {
+
+    .results-page {
+        padding: 9px 18px;
+    }
+
+    .results-grid {
+        margin-top: 8px;
+
+        gap: 8px;
+    }
+
+    .result-card {
+        padding: 8px;
+
+        border-radius: 11px;
+    }
+
+    .candidate-photo {
+        width: 49px;
+        height: 49px;
+    }
+
+    .candidate-info h2 {
+        font-size: 12px;
+    }
+
+    .vote-count strong {
+        font-size: 15px;
+    }
+
+    .summary {
+        margin-top: 6px;
+    }
+}
+
+
+/* =====================================================
+   MOBILE
+   TWO COLUMN
+===================================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        overflow-y: auto;
+    }
+
+    .results-page {
+        height: auto;
+        min-height: 100vh;
+
+        padding: 10px;
+    }
+
+
+    /* University */
+
+    .university {
+        gap: 7px;
+    }
+
+    .university img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .university h2 {
+        font-size: 10px;
+    }
+
+    .university p {
+        font-size: 6px;
+    }
+
+
+    /* Heading */
+
+    .page-header h1 {
+        font-size: 26px;
+    }
+
+    .description {
+        font-size: 7px;
+    }
+
+
+    /* Two columns */
+
+    .results-grid {
+        flex: none;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        grid-template-rows: none;
+
+        gap: 8px;
+
+        margin-top: 10px;
+    }
+
+
+    /* Small square card */
+
+    .result-card {
+        aspect-ratio: 1 / 1;
+
+        padding: 7px;
+
+        border-radius: 11px;
+    }
+
+
+    /* Card header */
+
+    .card-header {
+        font-size: 6px;
+
+        margin-bottom: 4px;
+    }
+
+    .card-header small {
+        font-size: 6px;
+    }
+
+
+    /* Candidate */
+
+    .candidate {
+        flex-direction: column;
+
+        gap: 3px;
+
+        text-align: center;
+    }
+
+
+    /* Image */
+
+    .candidate-photo {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    /* Info */
+
+    .candidate-info {
+        width: 100%;
+    }
+
+    .candidate-info h2 {
+        font-size: 10px;
+    }
+
+    .candidate-info p {
+        font-size: 5px;
+    }
+
+
+    /* Votes */
+
+    .vote-count {
+        justify-content: center;
+
+        margin-top: 2px;
+    }
+
+    .vote-count strong {
+        font-size: 14px;
+    }
+
+    .vote-count span {
+        font-size: 5px;
+    }
+
+
+    /* Progress */
+
+    .vote-progress {
+        margin-top: 4px;
+    }
+
+    .vote-progress > div:first-child {
+        font-size: 5px;
+    }
+
+
+    /* Winner */
+
+    .winner {
+        align-self: center;
+
+        margin-top: 3px;
+
+        padding: 2px 6px;
+
+        font-size: 5px;
+    }
+
+
+    /* Summary */
+
+    .summary {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 6px;
+
+        margin-top: 9px;
+    }
+
+    .summary div {
+        padding: 5px;
+    }
+
+    .summary strong {
+        font-size: 10px;
+    }
+
+    .summary span {
+        font-size: 5px;
+    }
+
+
+    footer {
+        margin-top: 7px;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL PHONE
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .page-header h1 {
+        font-size: 23px;
+    }
+
+    .result-card {
+        padding: 6px;
+    }
+
+    .candidate-photo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .candidate-info h2 {
+        font-size: 9px;
+    }
+
+    .candidate-info p {
+        font-size: 4.5px;
+    }
+
+    .vote-count strong {
+        font-size: 13px;
+    }
+
+    .winner {
+        font-size: 4.5px;
+    }
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+
+/* Glassmorphism Card Container */
+.card-container {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(115, 128, 236, 0.2);
+    overflow: hidden;
+}
+
+/* Sticker Floating Animations */
+.sticker-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sticker {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0.35;
+    animation: floatSticker 6s ease-in-out infinite alternate;
+}
+
+.sticker-1  { top: 5%;   left: 6%;   animation-delay: 0s; }
+.sticker-2  { top: 8%;   right: 8%;  animation-delay: 0.5s; }
+.sticker-3  { top: 25%;  left: 4%;   animation-delay: 1s; }
+.sticker-4  { top: 28%;  right: 5%;  animation-delay: 1.5s; }
+.sticker-5  { top: 48%;  left: 6%;   animation-delay: 2s; }
+.sticker-6  { top: 50%;  right: 6%;  animation-delay: 2.5s; }
+.sticker-7  { top: 70%;  left: 5%;   animation-delay: 3s; }
+.sticker-8  { top: 72%;  right: 7%;  animation-delay: 3.5s; }
+.sticker-9  { bottom: 8%; left: 8%;  animation-delay: 4s; }
+.sticker-10 { bottom: 8%; right: 8%; animation-delay: 4.5s; }
+
+@keyframes floatSticker {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-12px) rotate(10deg); }
+}
+
+/* Header & Logo Styles */
+.logo-container {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logo-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.event-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Countdown Display */
+.timer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.time-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 16px;
+    padding: 12px 8px;
+    box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.05);
+}
+
+.time-value {
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 0 10px rgba(79, 172, 254, 0.6);
+}
+
+.time-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #a4b0be;
+    letter-spacing: 1px;
+}
+
+/* Date Box & Action Button */
+.date-box {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 16px;
+}
+
+.calendar-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #00f2fe;
+    stroke-width: 2;
+    fill: none;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: #090a0f !important;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 242, 254, 0.3);
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 242, 254, 0.5);
+}

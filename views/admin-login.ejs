@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freshers' Welcome Login</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #1b1b3a, #4b2e83, #00b4d8);
+        overflow-x: hidden;
+        padding: 20px;
+      }
+
+      /* Background decorative ambient glows */
+      body::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: #00e5ff33;
+        border-radius: 50%;
+        top: -60px;
+        left: -60px;
+        filter: blur(50px);
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        background: #c77dff33;
+        border-radius: 50%;
+        bottom: -60px;
+        right: -60px;
+        filter: blur(50px);
+        z-index: 0;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 420px;
+        text-align: center;
+        z-index: 1;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 35px 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      }
+
+      .logo {
+        width: 80px;
+        height: auto;
+        margin-bottom: 12px;
+        object-fit: contain;
+      }
+
+      .card h2 {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+
+      .card h1 {
+        margin: 0 0 25px;
+        font-size: 28px;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .input-box {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        margin: 14px 0;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+      }
+
+      .input-box:focus-within {
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(0, 201, 255, 0.3);
+      }
+
+      .input-box i {
+        font-size: 18px;
+        color: #4b2e83;
+        margin-right: 12px;
+        min-width: 20px;
+        text-align: center;
+      }
+
+      .input-box input {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        background: transparent;
+        color: #333;
+      }
+
+      .input-box input::placeholder {
+        color: #888;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 15px;
+        padding: 13px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(90deg, #8e2de2, #00c9ff);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 40px;
+  }
+      
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 201, 255, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      /* Compact and fluid mobile adjustments */
+      @media (max-width: 480px) {
+        .card {
+          padding: 25px 20px;
+          border-radius: 16px;
+        }
+
+        .card h1 {
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+
+        .card h2 {
+          font-size: 13px;
+        }
+
+        .logo {
+          width: 70px;
+        }
+
+        .input-box {
+          padding: 10px 14px;
+          margin: 12px 0;
+        }
+
+        .input-box input {
+          font-size: 14px;
+        }
+
+        button {
+          padding: 12px;
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <img src="/image/mtulogo.png" class="logo" alt="MTU Logo" />
+
+        <h2>Mandalay Technological University</h2>
+        <h1>Freshers' Welcome</h1>
+
+        <form action="/auth/login" method="POST">
+          <div class="input-box">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" placeholder="Enter your name" name="username" required autocomplete="off" />
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" placeholder="Password" name="password" required />
+          </div>
+
+          <button type="submit">
+            Submit
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
