@@ -5,7 +5,7 @@ const userRoutes = require("./user.routes");
 const authRoutes = require("./auth.routes");
 const gmailRoutes = require("./gmail.routes");
 
-// Route Middlewares 
+// Route Middlewares
 router.use("/auth", authRoutes);
 router.use("/api/admin", adminRoutes);
 router.use("/admin", adminRoutes);

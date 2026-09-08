@@ -1,31 +1,26 @@
 const db = require("../config/db");
-const { Resend } = require("resend");
+const Brevo = require("@getbrevo/brevo");
 
-// Initialize Resend dynamically to prevent boot crashes if env var is missing
-const getResend = () => {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("Missing RESEND_API_KEY in environment variables.");
-  }
-  return new Resend(apiKey);
-};
+// Initialize Brevo API Client
+const apiInstance = new Brevo.TransactionalEmailsApi();
+const apiKey = apiInstance.authentications["apiKey"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
 // ======================================
-// SEND OTP (PREVENT DUPLICATES & DOUBLE VOTING)
+// SEND OTP (BREVO HTTP API)
 // ======================================
 exports.sendOtpService = async (email) => {
   const cleanEmail = email.trim().toLowerCase();
 
-  console.log("1. Checking existing user in DB...");
+  // 1. Check if user already voted
   const existingUser = await db.query(
     "SELECT * FROM voted_users WHERE LOWER(email) = $1",
     [cleanEmail],
   );
 
-  // Block OTP request if user has already voted
   if (existingUser.rows.length > 0) {
     const userRecord = existingUser.rows[0];
     if (userRecord.has_voted === true || userRecord.king_id !== null) {
@@ -33,8 +28,7 @@ exports.sendOtpService = async (email) => {
     }
   }
 
-  // Block sending a new code if an active, unexpired OTP already exists
-  console.log("2. Checking for active unexpired OTP...");
+  // 2. Check active unexpired OTP
   const activeOtp = await db.query(
     `SELECT expires_at FROM otp_codes 
      WHERE LOWER(email) = $1 AND expires_at > NOW()`,
@@ -47,39 +41,40 @@ exports.sendOtpService = async (email) => {
     );
   }
 
-  // Generate OTP
+  // 3. Generate & Save OTP
   const otp = generateOTP();
-  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes validity
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-  console.log("3. Clearing expired OTPs and saving new OTP to DB...");
   await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [cleanEmail]);
-
   await db.query(
-    `INSERT INTO otp_codes (email, otp, expires_at)
-     VALUES ($1, $2, $3)`,
+    `INSERT INTO otp_codes (email, otp, expires_at) VALUES ($1, $2, $3)`,
     [cleanEmail, otp, expiresAt],
   );
 
-  console.log("4. Triggering Resend API...");
-  const resend = getResend();
-
-  const { error } = await resend.emails.send({
-    from: "CodeaSquad Voting System <onboarding@resend.dev>",
-    to: [cleanEmail],
-    subject: "Voting Verification Code",
-    html: `
-      <h3>Your OTP Code is <b>${otp}</b></h3>
+  // 4. Send Email via Brevo API
+  const sendSmtpEmail = new Brevo.SendSmtpEmail();
+  sendSmtpEmail.subject = "MTU Voting System Verification Code";
+  sendSmtpEmail.htmlContent = `
+    <div style="font-family: sans-serif; padding: 20px;">
+      <h2>MTU Voting Verification</h2>
+      <p>Your Verification Code is: <b style="font-size: 24px; color: #0066ff;">${otp}</b></p>
       <p>This code will expire in 5 minutes.</p>
-    `,
-  });
+    </div>
+  `;
+  sendSmtpEmail.sender = {
+    name: "CodeaSquad Voting",
+    email: process.env.SENDER_EMAIL,
+  };
+  sendSmtpEmail.to = [{ email: cleanEmail }];
 
-  if (error) {
-    console.error("Resend Email Error:", error);
+  try {
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("OTP sent successfully via Brevo!");
+    return "OTP code sent successfully to your email.";
+  } catch (error) {
+    console.error("Brevo API Error:", error);
     throw new Error("Failed to send verification email. Please try again.");
   }
-
-  console.log("5. Email sent successfully via Resend!");
-  return "OTP code sent successfully to your email.";
 };
 
 // ======================================
@@ -89,7 +84,6 @@ exports.verifyOtpService = async (email, otp) => {
   const cleanEmail = email.trim().toLowerCase();
   const trimmedOtp = String(otp).trim();
 
-  // 1. Check if email exists in otp_codes
   const emailCheck = await db.query(
     `SELECT * FROM otp_codes WHERE LOWER(email) = $1`,
     [cleanEmail],
@@ -101,7 +95,6 @@ exports.verifyOtpService = async (email, otp) => {
     );
   }
 
-  // 2. Check if the specific OTP matches
   const result = await db.query(
     `SELECT * FROM otp_codes 
      WHERE LOWER(email) = $1 AND TRIM(otp) = $2`,
@@ -114,7 +107,6 @@ exports.verifyOtpService = async (email, otp) => {
 
   const record = result.rows[0];
 
-  // 3. Check expiration
   if (new Date() > new Date(record.expires_at)) {
     await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [
       cleanEmail,
@@ -122,14 +114,12 @@ exports.verifyOtpService = async (email, otp) => {
     throw new Error("OTP code has expired. Please request a new one.");
   }
 
-  // Clean up code after successful verification
   await db.query("DELETE FROM otp_codes WHERE LOWER(email) = $1", [cleanEmail]);
-
   return true;
 };
 
 // ======================================
-// SUBMIT VOTE (TRANSACTION & RACE SAFE)
+// SUBMIT VOTE
 // ======================================
 exports.submitVote = async ({
   email,
@@ -150,7 +140,6 @@ exports.submitVote = async ({
   try {
     await client.query("BEGIN");
 
-    // Lock the user record row to block concurrent double-voting attempts
     const existingVote = await client.query(
       `SELECT id, has_voted 
        FROM voted_users 
@@ -176,7 +165,6 @@ exports.submitVote = async ({
       };
     }
 
-    // Category vote increments
     const voteCategories = [
       { id: kingId, field: "kingVotes" },
       { id: queenId, field: "queenVotes" },
@@ -197,7 +185,6 @@ exports.submitVote = async ({
       }
     }
 
-    // Save choices and update voter record
     await client.query(
       `INSERT INTO voted_users
       (

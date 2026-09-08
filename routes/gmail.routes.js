@@ -66,7 +66,11 @@ router.post(
     }
   },
 );
-
+router.get(
+  "/api/user-ballot",
+  ensureAuthenticated,
+  gmailController.getUserBallot,
+);
 // Voted Confirmation Page View
 router.get("/votedpage", ensureAuthenticated, (req, res) => {
   res.render("votedpage");
