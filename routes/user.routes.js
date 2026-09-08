@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
 
     const ip = getLocalIp();
     const PORT = process.env.PORT || 3000;
-    const targetUrl = `https://mtu-voting-1.onrender.com/index`;
+    const targetUrl = `https://mtu-voting-1.onrender.com`;
 
     const qrDataUrl = await QRCode.toDataURL(targetUrl, {
       width: 250,
