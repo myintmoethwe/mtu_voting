@@ -1,504 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure Authentication | MTU Voting System</title>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --primary-light: #f8fafc;
-      --success-bg: #f0fdf4;
-      --success-text: #15803d;
-      --success-border: #bbf7d0;
-      --error-bg: #fef2f2;
-      --error-text: #b91c1c;
-      --error-border: #fecaca;
-      --warning-bg: #fffbeb;
-      --warning-text: #b45309;
-      --warning-border: #fde68a;
-      --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #cbd5e1;
-      --radius: 24px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-    
-    body { 
-      background: var(--bg-gradient); 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh; 
-      color: var(--text-main); 
-      padding: 16px; 
-      overflow-x: hidden; 
-    }
-
-    body::before { 
-      content: ""; 
-      position: fixed; 
-      inset: 0; 
-      pointer-events: none; 
-      background-image: radial-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px); 
-      background-size: 24px 24px; 
-    }
-
-    /* Single Unified Card */
-    .auth-container {
-      background: var(--card-bg);
-      width: 100%;
-      max-width: 460px;
-      border-radius: var(--radius);
-      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      padding: 36px 28px;
-      position: relative;
-      z-index: 1;
-      animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Clean, Borderless, Larger Logo completely static with no movement/animation */
-    .logo-container { 
-      margin: 0 auto 18px; 
-      display: inline-flex;
-      padding: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      position: relative;
-    }
-
-    .logo-img { 
-      width: 102px; 
-      height: 102px; 
-      object-fit: contain; 
-      filter: drop-shadow(0 10px 16px rgba(37, 99, 235, 0.15));
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .auth-header h2 { 
-      font-size: 22px; 
-      font-weight: 700; 
-      letter-spacing: -0.02em; 
-      margin-bottom: 6px; 
-      color: var(--text-main);
-    }
-
-    .auth-header p { 
-      font-size: 14px; 
-      color: var(--text-muted); 
-      font-weight: 400; 
-      line-height: 1.4;
-    }
-
-    .form-group { 
-      margin-bottom: 20px; 
-      text-align: left; 
-    }
-
-    label { 
-      display: block; 
-      font-size: 11.5px; 
-      font-weight: 700; 
-      color: var(--text-muted); 
-      margin-bottom: 8px; 
-      text-transform: uppercase; 
-      letter-spacing: 0.05em; 
-    }
-
-    .input-wrapper { 
-      position: relative; 
-      display: flex;
-      align-items: center;
-    }
-
-    .input-icon { 
-      position: absolute; 
-      left: 16px; 
-      color: var(--text-muted); 
-      pointer-events: none; 
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      transition: color 0.2s;
-    }
-
-    input { 
-      padding: 13px 16px 13px 46px; 
-      width: 100%; 
-      font-size: 14.5px; 
-      border: 1.5px solid var(--border-color); 
-      border-radius: 12px; 
-      outline: none; 
-      background-color: #f8fafc; 
-      transition: all 0.25s ease; 
-      color: var(--text-main); 
-      font-weight: 500;
-    }
-
-    input:focus { 
-      border-color: var(--primary); 
-      background-color: #ffffff; 
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
-    }
-
-    input:focus ~ .input-icon, input:not(:placeholder-shown) ~ .input-icon {
-      color: var(--primary);
-    }
-
-    button.primary-btn { 
-      width: 100%; 
-      padding: 14px; 
-      font-size: 15px; 
-      font-weight: 600; 
-      cursor: pointer; 
-      background: var(--primary); 
-      color: white; 
-      border: none; 
-      border-radius: 12px; 
-      transition: all 0.2s ease; 
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); 
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    button.primary-btn:hover { 
-      background: var(--primary-hover); 
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); 
-      transform: translateY(-1px);
-    }
-
-    button.primary-btn:active { 
-      transform: translateY(0) scale(0.98); 
-    }
-
-    button.primary-btn:disabled { 
-      background: #cbd5e1; 
-      box-shadow: none; 
-      cursor: not-allowed; 
-      transform: none;
-    }
-
-    #otpSection { 
-      display: none; 
-      animation: fadeIn 0.3s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .message { 
-      margin-top: 18px; 
-      padding: 12px 14px; 
-      font-size: 13.5px; 
-      font-weight: 500; 
-      border-radius: 10px; 
-      display: none; 
-      text-align: left; 
-      line-height: 1.4; 
-      animation: slideUp 0.3s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .message.warning { display: block; background-color: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
-    .message.error { display: block; background-color: var(--error-bg); color: var(--error-text); border: 1px solid var(--error-border); }
-    .message.success { display: block; background-color: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
-    .message.info { display: block; background-color: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; }
-
-    .back-link { 
-      margin-top: 18px; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px; 
-      font-size: 13.5px; 
-      color: var(--text-muted); 
-      text-decoration: none; 
-      cursor: pointer; 
-      font-weight: 500; 
-      transition: color 0.2s; 
-    }
-    
-    .back-link:hover { 
-      color: var(--primary); 
-    }
-
-    /* Already Voted Secure State Layout */
-    .voted-state-box {
-      background: var(--success-bg);
-      border: 1px solid var(--success-border);
-      border-radius: 16px;
-      padding: 24px 20px;
-      text-align: center;
-      animation: fadeIn 0.4s ease;
-      margin-top: 8px;
-    }
-
-    .voted-state-box i.main-icon {
-      font-size: 38px;
-      color: var(--success-text);
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    .voted-state-box h3 {
-      color: var(--success-text);
-      font-size: 17px;
-      margin-bottom: 6px;
-      font-weight: 700;
-    }
-
-    .voted-state-box p {
-      color: #166534;
-      font-size: 13.5px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .action-row {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .secondary-btn {
-      flex: 1;
-      padding: 11px 10px;
-      background: #ffffff;
-      color: var(--success-text);
-      border: 1px solid var(--success-border);
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      box-shadow: 0 2px 4px rgba(21, 128, 61, 0.04);
-    }
-
-    .secondary-btn:hover {
-      background: #dcfce7;
-    }
-
-    .footer-note { 
-      margin-top: 24px; 
-      font-size: 12px; 
-      color: var(--text-muted); 
-      border-top: 1px solid var(--border-color); 
-      padding-top: 16px; 
-      text-align: center;
-      font-weight: 500;
-    }
-
-    /* MOBILE & ULTRA-SMALL PHONE RESPONSIVENESS */
-    @media (max-width: 480px) {
-      body { padding: 12px; }
-      .auth-container { max-width: 100%; border-radius: 20px; padding: 28px 20px; }
-    }
-
-    @media (max-width: 360px) {
-      body { padding: 6px; }
-      .auth-container { border-radius: 16px; padding: 20px 14px; }
-      .logo-img { width: 88px; height: 88px; }
-      .auth-header h2 { font-size: 19px; }
-      .auth-header p { font-size: 13px; }
-      input { padding: 11px 12px 11px 40px; font-size: 13.5px; }
-      button.primary-btn { padding: 12px; font-size: 14px; }
-      .voted-state-box { padding: 16px 12px; }
-      .action-row { flex-direction: column; gap: 8px; }
-      .secondary-btn { width: 100%; padding: 10px; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="auth-container">
-    <div class="auth-header">
-      <div class="logo-container" title="MTU Secure Portal">
-        <img src="/image/mtulogo.png" alt="MTU Logo" class="logo-img">
-      </div>
-      <h2 id="cardTitle">MTU Voting System</h2>
-      <p id="cardSubtitle">Enter your email address to proceed with secure verification</p>
-    </div>
-
-    <div id="emailSection">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <div class="input-wrapper">
-          <span class="input-icon">
-            <i class="ri-mail-line"></i>
-          </span>
-          <input type="email" id="email" placeholder="name@example.com" required />
-        </div>
-      </div>
-      <button id="requestBtn" class="primary-btn" onclick="sendOTP()">
-        <span>Request Verification Code</span>
-        <i class="ri-arrow-right-line"></i>
-      </button>
-    </div>
-
-    <div id="otpSection">
-      <div class="form-group">
-        <label for="otp">One-Time Password</label>
-        <div class="input-wrapper">
-          <span class="input-icon">
-            <i class="ri-lock-password-line"></i>
-          </span>
-          <input type="text" id="otp" placeholder="Enter 6-digit code" maxlength="6" autocomplete="one-time-code" required />
-        </div>
-      </div>
-      <button id="verifyBtn" class="primary-btn" onclick="verifyOTP()">
-        <span>Verify & Proceed</span>
-        <i class="ri-check-line"></i>
-      </button>
-      <div>
-        <a class="back-link" onclick="resetForm()">
-          <i class="ri-arrow-left-line"></i>
-          Use a different email address
-        </a>
-      </div>
-    </div>
-
-    <div id="message" class="message"></div>
-
-    <div class="footer-note">
-      Mandalay Technological University &bull; Secure Portal
-    </div>
-  </div>
-
-  <script>
-    let userEmail = '';
-
-    function showMessage(text, type) {
-      const msgBox = document.getElementById('message');
-      msgBox.innerText = text;
-      msgBox.className = `message ${type}`;
-    }
-
-    function resetForm() {
-      userEmail = ''; 
-      document.getElementById('otpSection').style.display = 'none';
-      document.getElementById('emailSection').style.display = 'block';
-      document.getElementById('cardTitle').innerText = 'MTU Voting System';
-      document.getElementById('cardSubtitle').innerText = 'Enter your email address to proceed with secure verification';
-      document.getElementById('message').style.display = 'none';
-      
-      const votedBox = document.getElementById('alreadyVotedBox');
-      if (votedBox) votedBox.style.display = 'none';
-
-      const requestBtn = document.getElementById('requestBtn');
-      requestBtn.disabled = false;
-      requestBtn.innerHTML = '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
-      document.getElementById('email').value = '';
-      document.getElementById('otp').value = '';
-    }
-
-    async function sendOTP() {
-      const emailInput = document.getElementById('email').value.trim();
-      const sendBtn = document.getElementById('requestBtn');
-
-      if (!emailInput) {
-        showMessage('Please enter your email address.', 'warning');
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Authentication | MTU Voting System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-light: #f8fafc;
+        --success-bg: #f0fdf4;
+        --success-text: #15803d;
+        --success-border: #bbf7d0;
+        --error-bg: #fef2f2;
+        --error-text: #b91c1c;
+        --error-border: #fecaca;
+        --warning-bg: #fffbeb;
+        --warning-text: #b45309;
+        --warning-border: #fde68a;
+        --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #cbd5e1;
+        --radius: 24px;
       }
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailInput)) {
-        showMessage('Please enter a valid email format.', 'error');
-        return;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
       }
 
-      sendBtn.disabled = true;
-      sendBtn.innerHTML = '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Checking records...';
-      showMessage('Verifying email records...', 'info');
+      body {
+        background: var(--bg-gradient);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: var(--text-main);
+        padding: 16px;
+        overflow-x: hidden;
+      }
 
-      try {
-        const res = await fetch('/api/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: emailInput })
-        });
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(
+          rgba(37, 99, 235, 0.05) 1px,
+          transparent 1px
+        );
+        background-size: 24px 24px;
+      }
 
-        const data = await res.json();
+      /* Single Unified Card */
+      .auth-container {
+        background: var(--card-bg);
+        width: 100%;
+        max-width: 460px;
+        border-radius: var(--radius);
+        box-shadow:
+          0 25px 50px -12px rgba(15, 23, 42, 0.08),
+          0 0 1px 1px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        padding: 36px 28px;
+        position: relative;
+        z-index: 1;
+        animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
 
-        if (!data.success) {
-          if (data.message && data.message.toLowerCase().includes('already voted')) {
-            renderAlreadyVotedState(emailInput);
+      @keyframes cardAppear {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Clean, Borderless, Larger Logo completely static with no movement/animation */
+      .logo-container {
+        margin: 0 auto 18px;
+        display: inline-flex;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        position: relative;
+      }
+
+      .logo-img {
+        width: 102px;
+        height: 102px;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 16px rgba(37, 99, 235, 0.15));
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+
+      .auth-header h2 {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+        color: var(--text-main);
+      }
+
+      .auth-header p {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 400;
+        line-height: 1.4;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 16px;
+        color: var(--text-muted);
+        pointer-events: none;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+      }
+
+      input {
+        padding: 13px 16px 13px 46px;
+        width: 100%;
+        font-size: 14.5px;
+        border: 1.5px solid var(--border-color);
+        border-radius: 12px;
+        outline: none;
+        background-color: #f8fafc;
+        transition: all 0.25s ease;
+        color: var(--text-main);
+        font-weight: 500;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      input:focus ~ .input-icon,
+      input:not(:placeholder-shown) ~ .input-icon {
+        color: var(--primary);
+      }
+
+      button.primary-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      button.primary-btn:hover {
+        background: var(--primary-hover);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        transform: translateY(-1px);
+      }
+
+      button.primary-btn:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      button.primary-btn:disabled {
+        background: #cbd5e1;
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      #otpSection {
+        display: none;
+        animation: fadeIn 0.3s ease forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .message {
+        margin-top: 18px;
+        padding: 12px 14px;
+        font-size: 13.5px;
+        font-weight: 500;
+        border-radius: 10px;
+        display: none;
+        text-align: left;
+        line-height: 1.4;
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.warning {
+        display: block;
+        background-color: var(--warning-bg);
+        color: var(--warning-text);
+        border: 1px solid var(--warning-border);
+      }
+      .message.error {
+        display: block;
+        background-color: var(--error-bg);
+        color: var(--error-text);
+        border: 1px solid var(--error-border);
+      }
+      .message.success {
+        display: block;
+        background-color: var(--success-bg);
+        color: var(--success-text);
+        border: 1px solid var(--success-border);
+      }
+      .message.info {
+        display: block;
+        background-color: #eff6ff;
+        color: var(--primary);
+        border: 1px solid #bfdbfe;
+      }
+
+      .back-link {
+        margin-top: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13.5px;
+        color: var(--text-muted);
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .back-link:hover {
+        color: var(--primary);
+      }
+
+      /* Already Voted Secure State Layout */
+      .voted-state-box {
+        background: var(--success-bg);
+        border: 1px solid var(--success-border);
+        border-radius: 16px;
+        padding: 24px 20px;
+        text-align: center;
+        animation: fadeIn 0.4s ease;
+        margin-top: 8px;
+      }
+
+      .voted-state-box i.main-icon {
+        font-size: 38px;
+        color: var(--success-text);
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .voted-state-box h3 {
+        color: var(--success-text);
+        font-size: 17px;
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+
+      .voted-state-box p {
+        color: #166534;
+        font-size: 13.5px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .action-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .secondary-btn {
+        flex: 1;
+        padding: 11px 10px;
+        background: #ffffff;
+        color: var(--success-text);
+        border: 1px solid var(--success-border);
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        box-shadow: 0 2px 4px rgba(21, 128, 61, 0.04);
+      }
+
+      .secondary-btn:hover {
+        background: #dcfce7;
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        font-size: 12px;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border-color);
+        padding-top: 16px;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      /* MOBILE & ULTRA-SMALL PHONE RESPONSIVENESS */
+      @media (max-width: 480px) {
+        body {
+          padding: 12px;
+        }
+        .auth-container {
+          max-width: 100%;
+          border-radius: 20px;
+          padding: 28px 20px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        body {
+          padding: 6px;
+        }
+        .auth-container {
+          border-radius: 16px;
+          padding: 20px 14px;
+        }
+        .logo-img {
+          width: 88px;
+          height: 88px;
+        }
+        .auth-header h2 {
+          font-size: 19px;
+        }
+        .auth-header p {
+          font-size: 13px;
+        }
+        input {
+          padding: 11px 12px 11px 40px;
+          font-size: 13.5px;
+        }
+        button.primary-btn {
+          padding: 12px;
+          font-size: 14px;
+        }
+        .voted-state-box {
+          padding: 16px 12px;
+        }
+        .action-row {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .secondary-btn {
+          width: 100%;
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="logo-container" title="MTU Secure Portal">
+          <img src="/image/mtulogo.png" alt="MTU Logo" class="logo-img" />
+        </div>
+        <h2 id="cardTitle">MTU Voting System</h2>
+        <p id="cardSubtitle">
+          Enter your email address to proceed with secure verification
+        </p>
+      </div>
+
+      <div id="emailSection">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <i class="ri-mail-line"></i>
+            </span>
+            <input
+              type="email"
+              id="email"
+              placeholder="name@example.com"
+              required
+            />
+          </div>
+        </div>
+        <button id="requestBtn" class="primary-btn" onclick="sendOTP()">
+          <span>Request Verification Code</span>
+          <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
+
+      <div id="otpSection">
+        <div class="form-group">
+          <label for="otp">One-Time Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <i class="ri-lock-password-line"></i>
+            </span>
+            <input
+              type="text"
+              id="otp"
+              placeholder="Enter 6-digit code"
+              maxlength="6"
+              autocomplete="one-time-code"
+              required
+            />
+          </div>
+        </div>
+        <button id="verifyBtn" class="primary-btn" onclick="verifyOTP()">
+          <span>Verify & Proceed</span>
+          <i class="ri-check-line"></i>
+        </button>
+        <div>
+          <a class="back-link" onclick="resetForm()">
+            <i class="ri-arrow-left-line"></i>
+            Use a different email address
+          </a>
+        </div>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <div class="footer-note">
+        Mandalay Technological University &bull; Secure Portal
+      </div>
+    </div>
+
+    <script>
+      let userEmail = "";
+
+      function showMessage(text, type) {
+        const msgBox = document.getElementById("message");
+        msgBox.innerText = text;
+        msgBox.className = `message ${type}`;
+      }
+
+      function resetForm() {
+        userEmail = "";
+        document.getElementById("otpSection").style.display = "none";
+        document.getElementById("emailSection").style.display = "block";
+        document.getElementById("cardTitle").innerText = "MTU Voting System";
+        document.getElementById("cardSubtitle").innerText =
+          "Enter your email address to proceed with secure verification";
+        document.getElementById("message").style.display = "none";
+
+        const votedBox = document.getElementById("alreadyVotedBox");
+        if (votedBox) votedBox.style.display = "none";
+
+        const requestBtn = document.getElementById("requestBtn");
+        requestBtn.disabled = false;
+        requestBtn.innerHTML =
+          '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+        document.getElementById("email").value = "";
+        document.getElementById("otp").value = "";
+      }
+
+      async function sendOTP() {
+        const emailInput = document.getElementById("email").value.trim();
+        const sendBtn = document.getElementById("requestBtn");
+
+        if (!emailInput) {
+          showMessage("Please enter your email address.", "warning");
+          return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput)) {
+          showMessage("Please enter a valid email format.", "error");
+          return;
+        }
+
+        sendBtn.disabled = true;
+        sendBtn.innerHTML =
+          '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Checking records...';
+        showMessage("Verifying email records...", "info");
+
+        try {
+          const res = await fetch("/api/send-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: emailInput }),
+          });
+
+          const data = await res.json();
+
+          if (!data.success) {
+            if (
+              data.message &&
+              data.message.toLowerCase().includes("already voted")
+            ) {
+              renderAlreadyVotedState(emailInput);
+              return;
+            }
+
+            showMessage(data.message, "error");
+            sendBtn.disabled = false;
+            sendBtn.innerHTML =
+              '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
             return;
           }
 
-          showMessage(data.message, 'error');
-          sendBtn.disabled = false;
-          sendBtn.innerHTML = '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
-          return;
-        }
+          if (data.redirectUrl) {
+            userEmail = emailInput;
+            showMessage("Redirecting to your session...", "success");
+            setTimeout(() => {
+              window.location.href = data.redirectUrl;
+            }, 800);
+            return;
+          }
 
-        if (data.redirectUrl) {
-          userEmail = emailInput;
-          showMessage('Redirecting to your session...', 'success');
-          setTimeout(() => {
-            window.location.href = data.redirectUrl;
-          }, 800);
-          return;
-        }
-
-        if (data.requiresOtp) {
-          userEmail = emailInput;
-          showMessage('Verification code dispatched to your inbox.', 'success');
-          document.getElementById('emailSection').style.display = 'none';
-          document.getElementById('otpSection').style.display = 'block';
-          document.getElementById('cardTitle').innerText = 'Enter Verification Code';
-          document.getElementById('cardSubtitle').innerText = emailInput;
+          if (data.requiresOtp) {
+            userEmail = emailInput;
+            showMessage(
+              "Verification code dispatched to your inbox.",
+              "success",
+            );
+            document.getElementById("emailSection").style.display = "none";
+            document.getElementById("otpSection").style.display = "block";
+            document.getElementById("cardTitle").innerText =
+              "Enter Verification Code";
+            document.getElementById("cardSubtitle").innerText = emailInput;
+            sendBtn.disabled = false;
+            sendBtn.innerHTML =
+              '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+          }
+        } catch (err) {
+          showMessage(
+            "A connection error occurred. Please try again.",
+            "error",
+          );
           sendBtn.disabled = false;
-          sendBtn.innerHTML = '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+          sendBtn.innerHTML =
+            '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
         }
-      } catch (err) {
-        showMessage('A connection error occurred. Please try again.', 'error');
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
       }
-    }
 
-    function renderAlreadyVotedState(email) {
-      const container = document.querySelector('.auth-container');
-      document.getElementById('cardTitle').innerText = 'Already Participated';
-      document.getElementById('cardSubtitle').innerText = `${email}`;
-      document.getElementById('emailSection').style.display = 'none';
-      document.getElementById('message').style.display = 'none';
+      function renderAlreadyVotedState(email) {
+        const container = document.querySelector(".auth-container");
+        document.getElementById("cardTitle").innerText = "Already Participated";
+        document.getElementById("cardSubtitle").innerText = `${email}`;
+        document.getElementById("emailSection").style.display = "none";
+        document.getElementById("message").style.display = "none";
 
-      let votedBox = document.getElementById('alreadyVotedBox');
-      if (!votedBox) {
-        votedBox = document.createElement('div');
-        votedBox.id = 'alreadyVotedBox';
-        votedBox.className = 'voted-state-box';
-        votedBox.innerHTML = `
+        let votedBox = document.getElementById("alreadyVotedBox");
+        if (!votedBox) {
+          votedBox = document.createElement("div");
+          votedBox.id = "alreadyVotedBox";
+          votedBox.className = "voted-state-box";
+          votedBox.innerHTML = `
           <i class="ri-checkbox-circle-fill main-icon"></i>
           <h3>Vote Already Recorded</h3>
           <p>Our secure system indicates that this specific email address has already cast its ballot. You can inspect your choices in view-only mode or check live updates.</p>
@@ -507,82 +624,114 @@
             <a href="/results" class="secondary-btn" style="color: var(--primary); border-color: #bfdbfe; background: #eff6ff;"><i class="ri-bar-chart-line"></i> Results</a>
           </div>
         `;
-        container.insertBefore(votedBox, document.querySelector('.footer-note'));
-      } else {
-        votedBox.style.display = 'block';
-      }
-    }
-
-    async function openViewBallot(email) {
-      const btn = document.getElementById('viewBallotBtn');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Loading ballot...';
-
-      try {
-        const res = await fetch('/api/view-ballot-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email })
-        });
-        const data = await res.json();
-
-        if (data.success && data.redirectUrl) {
-          window.location.href = data.redirectUrl;
+          container.insertBefore(
+            votedBox,
+            document.querySelector(".footer-note"),
+          );
         } else {
-          alert(data.message || 'Unable to open ballot session.');
+          votedBox.style.display = "block";
+        }
+      }
+
+      async function openViewBallot(email) {
+        const btn = document.getElementById("viewBallotBtn");
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Loading ballot...';
+
+        try {
+          const res = await fetch("/api/view-ballot-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email }),
+          });
+
+          // Safely check HTTP response status before parsing JSON
+          if (!res.ok) {
+            const errorText = await res.text();
+            let errorMessage = "Unable to open ballot session.";
+            try {
+              const errorJson = JSON.parse(errorText);
+              errorMessage = errorJson.message || errorMessage;
+            } catch (e) {
+              // Response wasn't JSON (e.g. 500 HTML error page)
+            }
+            throw new Error(errorMessage);
+          }
+
+          const data = await res.json();
+
+          if (data.success && data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+          } else {
+            alert(data.message || "Unable to open ballot session.");
+            btn.disabled = false;
+            btn.innerHTML = '<i class="ri-eye-line"></i> View Ballot';
+          }
+        } catch (err) {
+          console.error("View Ballot Error:", err);
+          alert(err.message || "A network error occurred. Please try again.");
           btn.disabled = false;
           btn.innerHTML = '<i class="ri-eye-line"></i> View Ballot';
         }
-      } catch (err) {
-        alert('Connection error occurred.');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="ri-eye-line"></i> View Ballot';
-      }
-    }
-
-    async function verifyOTP() {
-      const otpInput = document.getElementById('otp').value.trim();
-      const verifyBtn = document.getElementById('verifyBtn');
-
-      if (!otpInput) {
-        showMessage('Please enter the 6-digit verification code.', 'warning');
-        return;
       }
 
-      verifyBtn.disabled = true;
-      verifyBtn.innerHTML = '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Confirming code...';
-      showMessage('Verifying authorization code...', 'info');
+      async function verifyOTP() {
+        const otpInput = document.getElementById("otp").value.trim();
+        const verifyBtn = document.getElementById("verifyBtn");
 
-      try {
-        const res = await fetch('/api/verify-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: userEmail, otp: otpInput })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          showMessage('Authentication successful! Redirecting...', 'success');
-          setTimeout(() => {
-            window.location.href = data.redirectUrl;
-          }, 800);
-        } else {
-          showMessage(data.message || 'Invalid authorization code. Please try again.', 'error');
-          verifyBtn.disabled = false;
-          verifyBtn.innerHTML = '<span>Verify & Proceed</span><i class="ri-check-line"></i>';
+        if (!otpInput) {
+          showMessage("Please enter the 6-digit verification code.", "warning");
+          return;
         }
-      } catch (err) {
-        showMessage('A server error occurred during verification. Please try again.', 'error');
-        verifyBtn.disabled = false;
-        verifyBtn.innerHTML = '<span>Verify & Proceed</span><i class="ri-check-line"></i>';
+
+        verifyBtn.disabled = true;
+        verifyBtn.innerHTML =
+          '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Confirming code...';
+        showMessage("Verifying authorization code...", "info");
+
+        try {
+          const res = await fetch("/api/verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: userEmail, otp: otpInput }),
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            showMessage("Authentication successful! Redirecting...", "success");
+            setTimeout(() => {
+              window.location.href = data.redirectUrl;
+            }, 800);
+          } else {
+            showMessage(
+              data.message || "Invalid authorization code. Please try again.",
+              "error",
+            );
+            verifyBtn.disabled = false;
+            verifyBtn.innerHTML =
+              '<span>Verify & Proceed</span><i class="ri-check-line"></i>';
+          }
+        } catch (err) {
+          showMessage(
+            "A server error occurred during verification. Please try again.",
+            "error",
+          );
+          verifyBtn.disabled = false;
+          verifyBtn.innerHTML =
+            '<span>Verify & Proceed</span><i class="ri-check-line"></i>';
+        }
       }
-    }
-  </script>
-  <style>
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
-</body>
+    </script>
+    <style>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </body>
 </html>

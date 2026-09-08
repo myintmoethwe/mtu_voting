@@ -68,28 +68,32 @@ router.post(
 );
 
 // GET USER BALLOT API (Inline Handler Fix)
-router.get("/api/user-ballot", ensureAuthenticated, async (req, res) => {
-  try {
-    const email = req.session.email;
-    const userCheck = await db.query(
-      `SELECT king_id, queen_id, mr_smart_id, ms_style_id, mr_popular_id, ms_popular_id 
+router.get(
+  "/api/view-ballot-session",
+  ensureAuthenticated,
+  async (req, res) => {
+    try {
+      const email = req.session.email;
+      const userCheck = await db.query(
+        `SELECT king_id, queen_id, mr_smart_id, ms_style_id, mr_popular_id, ms_popular_id 
        FROM voted_users 
        WHERE LOWER(email) = LOWER($1)`,
-      [email],
-    );
+        [email],
+      );
 
-    if (userCheck.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No ballot record found." });
+      if (userCheck.rows.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "No ballot record found." });
+      }
+
+      res.json({ success: true, ballot: userCheck.rows[0] });
+    } catch (err) {
+      console.error("Ballot retrieval error:", err);
+      res.status(500).json({ success: false, message: "Server error." });
     }
-
-    res.json({ success: true, ballot: userCheck.rows[0] });
-  } catch (err) {
-    console.error("Ballot retrieval error:", err);
-    res.status(500).json({ success: false, message: "Server error." });
-  }
-});
+  },
+);
 
 // Voted Confirmation Page View
 router.get("/votedpage", ensureAuthenticated, (req, res) => {
