@@ -91,7 +91,7 @@
         }
       }
 
-      /* Clean, Borderless, Larger Logo completely static with no movement/animation */
+      /* Logo styles */
       .logo-container {
         margin: 0 auto 18px;
         display: inline-flex;
@@ -302,7 +302,6 @@
         color: var(--primary);
       }
 
-      /* Already Voted Secure State Layout */
       .voted-state-box {
         background: var(--success-bg);
         border: 1px solid var(--success-border);
@@ -373,7 +372,15 @@
         font-weight: 500;
       }
 
-      /* MOBILE & ULTRA-SMALL PHONE RESPONSIVENESS */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
       @media (max-width: 480px) {
         body {
           padding: 12px;
@@ -439,20 +446,20 @@
 
       <div id="emailSection">
         <div class="form-group">
-          <label for="email">Email Address</label>
+          <label for="emailInput">Email Address</label>
           <div class="input-wrapper">
             <span class="input-icon">
               <i class="ri-mail-line"></i>
             </span>
             <input
               type="email"
-              id="email"
+              id="emailInput"
               placeholder="name@example.com"
               required
             />
           </div>
         </div>
-        <button id="requestBtn" class="primary-btn" onclick="sendOTP()">
+        <button id="requestBtn" class="primary-btn" onclick="requestOTP()">
           <span>Request Verification Code</span>
           <i class="ri-arrow-right-line"></i>
         </button>
@@ -499,8 +506,28 @@
 
       function showMessage(text, type) {
         const msgBox = document.getElementById("message");
-        msgBox.innerText = text;
-        msgBox.className = `message ${type}`;
+        if (msgBox) {
+          msgBox.innerText = text;
+          msgBox.className = `message ${type}`;
+        }
+      }
+
+      function hideMessage() {
+        const msgBox = document.getElementById("message");
+        if (msgBox) {
+          msgBox.style.display = "none";
+          msgBox.className = "message";
+        }
+      }
+
+      function showOtpStep() {
+        document.getElementById("emailSection").style.display = "none";
+        document.getElementById("otpSection").style.display = "block";
+        document.getElementById("cardTitle").innerText =
+          "Enter Authorization Code";
+        document.getElementById("cardSubtitle").innerText =
+          `Sent code to ${userEmail}`;
+        showMessage("Verification code sent to your email.", "info");
       }
 
       function resetForm() {
@@ -510,33 +537,49 @@
         document.getElementById("cardTitle").innerText = "MTU Voting System";
         document.getElementById("cardSubtitle").innerText =
           "Enter your email address to proceed with secure verification";
-        document.getElementById("message").style.display = "none";
+        hideMessage();
 
         const votedBox = document.getElementById("alreadyVotedBox");
         if (votedBox) votedBox.style.display = "none";
 
-        const requestBtn = document.getElementById("requestBtn");
-        requestBtn.disabled = false;
-        requestBtn.innerHTML =
-          '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
-        document.getElementById("email").value = "";
+        resetRequestBtn();
+        document.getElementById("emailInput").value = "";
         document.getElementById("otp").value = "";
+      }
+
+      function resetRequestBtn() {
+        const requestBtn = document.getElementById("requestBtn");
+        if (requestBtn) {
+          requestBtn.disabled = false;
+          requestBtn.innerHTML =
+            '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+        }
       }
 
       async function requestOTP() {
         const emailInput = document.getElementById("emailInput");
-        const errorBox = document.getElementById("errorBox");
-        const email = emailInput.value.trim();
+        const email = emailInput ? emailInput.value.trim() : "";
+        const requestBtn = document.getElementById("requestBtn");
 
-        if (!email) return;
+        if (!email) {
+          showMessage("Please enter your email address.", "warning");
+          return;
+        }
 
-        errorBox.style.display = "none";
+        userEmail = email;
+        hideMessage();
+
+        if (requestBtn) {
+          requestBtn.disabled = true;
+          requestBtn.innerHTML =
+            '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Sending code...';
+        }
 
         try {
           const res = await fetch("/api/send-otp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email }),
+            body: JSON.stringify({ email: userEmail }),
           });
 
           const data = await res.json();
@@ -544,24 +587,24 @@
           if (res.ok && data.success) {
             showOtpStep();
           } else if (data.alreadyVoted) {
-            renderAlreadyVotedState(email);
+            renderAlreadyVotedState(userEmail);
           } else {
-            errorBox.style.display = "block";
-            errorBox.innerText = data.message || "Failed to send OTP.";
+            showMessage(data.message || "Failed to send OTP.", "error");
+            resetRequestBtn();
           }
         } catch (err) {
           console.error("Request OTP Error:", err);
-          errorBox.style.display = "block";
-          errorBox.innerText = "Network error occurred. Please try again.";
+          showMessage("Network error occurred. Please try again.", "error");
+          resetRequestBtn();
         }
       }
 
       function renderAlreadyVotedState(email) {
         const container = document.querySelector(".auth-container");
         document.getElementById("cardTitle").innerText = "Already Participated";
-        document.getElementById("cardSubtitle").innerText = `${email}`;
+        document.getElementById("cardSubtitle").innerText = email;
         document.getElementById("emailSection").style.display = "none";
-        document.getElementById("message").style.display = "none";
+        hideMessage();
 
         let votedBox = document.getElementById("alreadyVotedBox");
         if (!votedBox) {
@@ -569,14 +612,14 @@
           votedBox.id = "alreadyVotedBox";
           votedBox.className = "voted-state-box";
           votedBox.innerHTML = `
-          <i class="ri-checkbox-circle-fill main-icon"></i>
-          <h3>Vote Already Recorded</h3>
-          <p>Our secure system indicates that this specific email address has already cast its ballot. You can inspect your choices in view-only mode or check live updates.</p>
-          <div class="action-row">
-            <button id="viewBallotBtn" class="secondary-btn" onclick="openViewBallot('${email}')"><i class="ri-eye-line"></i> View Ballot</button>
-            <a href="/results" class="secondary-btn" style="color: var(--primary); border-color: #bfdbfe; background: #eff6ff;"><i class="ri-bar-chart-line"></i> Results</a>
-          </div>
-        `;
+            <i class="ri-checkbox-circle-fill main-icon"></i>
+            <h3>Vote Already Recorded</h3>
+            <p>Our secure system indicates that this specific email address has already cast its ballot. You can inspect your choices in view-only mode or check live updates.</p>
+            <div class="action-row">
+              <button id="viewBallotBtn" class="secondary-btn" onclick="openViewBallot('${email}')"><i class="ri-eye-line"></i> View Ballot</button>
+              <a href="/results" class="secondary-btn" style="color: var(--primary); border-color: #bfdbfe; background: #eff6ff;"><i class="ri-bar-chart-line"></i> Results</a>
+            </div>
+          `;
           container.insertBefore(
             votedBox,
             document.querySelector(".footer-note"),
@@ -603,7 +646,6 @@
 
           const contentType = res.headers.get("content-type");
 
-          // Check if the server returned HTML (error page / 404 / 500)
           if (!contentType || !contentType.includes("application/json")) {
             throw new Error(
               `Server returned status ${res.status} (non-JSON response). Check backend route configuration.`,
@@ -657,7 +699,7 @@
           if (data.success) {
             showMessage("Authentication successful! Redirecting...", "success");
             setTimeout(() => {
-              window.location.href = data.redirectUrl;
+              window.location.href = data.redirectUrl || "/votingpage";
             }, 800);
           } else {
             showMessage(
@@ -679,15 +721,5 @@
         }
       }
     </script>
-    <style>
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
   </body>
 </html>
