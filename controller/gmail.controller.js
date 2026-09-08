@@ -1,6 +1,5 @@
 const gmailServices = require("../services/gmail.services");
 
-// SEND OTP CONTROLLER
 exports.sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -22,11 +21,11 @@ exports.sendOtp = async (req, res) => {
   } catch (error) {
     console.error("Send OTP Controller Error:", error.message);
 
-    // Handles the already voted condition expected by frontend renderAlreadyVotedState()
-    if (error.message.toLowerCase().includes("already voted")) {
+    if (error.message.includes("already voted")) {
       return res.status(400).json({
         success: false,
-        message: "This email address has already voted.",
+        alreadyVoted: true,
+        message: "This email address has already cast its vote.",
       });
     }
 
@@ -36,7 +35,6 @@ exports.sendOtp = async (req, res) => {
     });
   }
 };
-
 // VERIFY OTP CONTROLLER
 exports.verifyOtp = async (req, res) => {
   try {

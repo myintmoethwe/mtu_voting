@@ -523,83 +523,36 @@
         document.getElementById("otp").value = "";
       }
 
-      async function sendOTP() {
-        const emailInput = document.getElementById("email").value.trim();
-        const sendBtn = document.getElementById("requestBtn");
+      async function requestOTP() {
+        const emailInput = document.getElementById("emailInput");
+        const errorBox = document.getElementById("errorBox");
+        const email = emailInput.value.trim();
 
-        if (!emailInput) {
-          showMessage("Please enter your email address.", "warning");
-          return;
-        }
+        if (!email) return;
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailInput)) {
-          showMessage("Please enter a valid email format.", "error");
-          return;
-        }
-
-        sendBtn.disabled = true;
-        sendBtn.innerHTML =
-          '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Checking records...';
-        showMessage("Verifying email records...", "info");
+        errorBox.style.display = "none";
 
         try {
           const res = await fetch("/api/send-otp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: emailInput }),
+            body: JSON.stringify({ email: email }),
           });
 
           const data = await res.json();
 
-          if (!data.success) {
-            if (
-              data.message &&
-              data.message.toLowerCase().includes("already voted")
-            ) {
-              renderAlreadyVotedState(emailInput);
-              return;
-            }
-
-            showMessage(data.message, "error");
-            sendBtn.disabled = false;
-            sendBtn.innerHTML =
-              '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
-            return;
-          }
-
-          if (data.redirectUrl) {
-            userEmail = emailInput;
-            showMessage("Redirecting to your session...", "success");
-            setTimeout(() => {
-              window.location.href = data.redirectUrl;
-            }, 800);
-            return;
-          }
-
-          if (data.requiresOtp) {
-            userEmail = emailInput;
-            showMessage(
-              "Verification code dispatched to your inbox.",
-              "success",
-            );
-            document.getElementById("emailSection").style.display = "none";
-            document.getElementById("otpSection").style.display = "block";
-            document.getElementById("cardTitle").innerText =
-              "Enter Verification Code";
-            document.getElementById("cardSubtitle").innerText = emailInput;
-            sendBtn.disabled = false;
-            sendBtn.innerHTML =
-              '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+          if (res.ok && data.success) {
+            showOtpStep();
+          } else if (data.alreadyVoted) {
+            renderAlreadyVotedState(email);
+          } else {
+            errorBox.style.display = "block";
+            errorBox.innerText = data.message || "Failed to send OTP.";
           }
         } catch (err) {
-          showMessage(
-            "A connection error occurred. Please try again.",
-            "error",
-          );
-          sendBtn.disabled = false;
-          sendBtn.innerHTML =
-            '<span>Request Verification Code</span><i class="ri-arrow-right-line"></i>';
+          console.error("Request OTP Error:", err);
+          errorBox.style.display = "block";
+          errorBox.innerText = "Network error occurred. Please try again.";
         }
       }
 

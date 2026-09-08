@@ -40,34 +40,53 @@ router.get("/votingpage", ensureAuthenticated, async (req, res) => {
   }
 });
 
-// SECURED: Session-based ballot verification check
-router.post(
-  "/api/view-ballot-session",
-  ensureAuthenticated,
-  async (req, res) => {
-    try {
-      const email = req.session.email;
+// View Ballot Session Endpoint
+router.post("/api/view-ballot-session", async (req, res) => {
+  try {
+    const { email } = req.body;
 
-      const userCheck = await db.query(
-        "SELECT has_voted FROM voted_users WHERE LOWER(email) = LOWER($1)",
-        [email],
-      );
-
-      if (userCheck.rows.length > 0 && userCheck.rows[0].has_voted === true) {
-        return res.json({ success: true, redirectUrl: "/votingpage" });
-      }
-
-      res
-        .status(403)
-        .json({ success: false, message: "Unauthorized ballot access" });
-    } catch (err) {
-      console.error("Ballot Session Error:", err);
-      res.status(500).json({ success: false, message: "Server error" });
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required." });
     }
-  },
-);
 
-// GET USER BALLOT API (Inline Handler Fix)
+    const cleanEmail = email.trim().toLowerCase();
+
+    const userCheck = await db.query(
+      "SELECT has_voted FROM voted_users WHERE LOWER(email) = LOWER($1)",
+      [cleanEmail],
+    );
+
+    if (userCheck.rows.length > 0 && userCheck.rows[0].has_voted === true) {
+      req.session.email = cleanEmail;
+
+      return req.session.save((err) => {
+        if (err) {
+          console.error("Session Save Error:", err);
+          return res
+            .status(500)
+            .json({ success: false, message: "Session storage error." });
+        }
+        return res.json({ success: true, redirectUrl: "/votingpage" });
+      });
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: "No submitted ballot found for this email address.",
+    });
+  } catch (err) {
+    console.error("Ballot Session Route Error:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error setting up session." });
+  }
+});
+
+router.post("/api/send-otp", gmailController.sendOtp);
+
+module.exports = router; // GET USER BALLOT API (Inline Handler Fix)
 router.get(
   "/api/view-ballot-session",
   ensureAuthenticated,
