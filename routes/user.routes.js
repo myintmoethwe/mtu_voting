@@ -22,7 +22,6 @@ router.get("/", async (req, res) => {
     const countdownResult = await pool.query(
       "SELECT target_time, duration, countdown_status FROM public.settings ORDER BY id DESC LIMIT 1",
     );
-
     const countdown =
       countdownResult.rows.length > 0
         ? countdownResult.rows[0]
@@ -32,24 +31,17 @@ router.get("/", async (req, res) => {
             countdown_status: "stopped",
           };
 
-    // Your deployed Render website URL
-    const targetUrl = "https://mtu-voting-1.onrender.com/index";
+    const ip = getLocalIp();
+    const PORT = process.env.PORT || 3000;
+    const targetUrl = `https://mtu-voting-1.onrender.com/`;
 
     const qrDataUrl = await QRCode.toDataURL(targetUrl, {
       width: 250,
       margin: 2,
-      color: {
-        dark: "#0066ff",
-        light: "#ffffff",
-      },
+      color: { dark: "#0066ff", light: "#ffffff" },
     });
 
-    console.log("QR URL:", targetUrl);
-
-    res.render("qr_view", {
-      qrCode: qrDataUrl,
-      countdown,
-    });
+    res.render("qr_view", { qrCode: qrDataUrl, countdown });
   } catch (err) {
     console.error("QR Generation Error:", err);
     res.status(500).send("Error generating QR code");
