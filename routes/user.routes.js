@@ -19,18 +19,18 @@ function getLocalIp() {
 
 router.get("/", async (req, res) => {
   try {
-    // const countdownResult = await pool.query(
-    //   "SELECT target_time, duration, countdown_status FROM public.settings ORDER BY id DESC LIMIT 1",
-    // );
+    const countdownResult = await pool.query(
+      "SELECT target_time, duration, countdown_status FROM public.settings ORDER BY id DESC LIMIT 1",
+    );
 
-    // const countdown =
-    //   countdownResult.rows.length > 0
-    //     ? countdownResult.rows[0]
-    //     : {
-    //         target_time: null,
-    //         duration: "00:00:00",
-    //         countdown_status: "stopped",
-    //       };
+    const countdown =
+      countdownResult.rows.length > 0
+        ? countdownResult.rows[0]
+        : {
+            target_time: null,
+            duration: "00:00:00",
+            countdown_status: "stopped",
+          };
 
     // Your deployed Render website URL
     const targetUrl = "https://mtu-voting-1.onrender.com/index";
@@ -56,80 +56,80 @@ router.get("/", async (req, res) => {
   }
 });
 
-// router.get("/index", async (req, res) => {
-//   try {
-//     const result = await pool.query(
-//       "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
-//     );
-//     const countdown =
-//       result.rows.length > 0
-//         ? result.rows[0]
-//         : {
-//             target_time: null,
-//             duration: "00:00:00",
-//             countdown_status: "stopped",
-//           };
+router.get("/index", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
+    );
+    const countdown =
+      result.rows.length > 0
+        ? result.rows[0]
+        : {
+            target_time: null,
+            duration: "00:00:00",
+            countdown_status: "stopped",
+          };
 
-//     res.render("index", { countdown });
-//   } catch (err) {
-//     console.error(err);
-//     res.render("index", {
-//       countdown: {
-//         target_time: null,
-//         duration: "00:00:00",
-//         countdown_status: "stopped",
-//       },
-//     });
-//   }
-// });
+    res.render("index", { countdown });
+  } catch (err) {
+    console.error(err);
+    res.render("index", {
+      countdown: {
+        target_time: null,
+        duration: "00:00:00",
+        countdown_status: "stopped",
+      },
+    });
+  }
+});
 
-// router.get("/home", async (req, res) => {
-//   try {
-//     const countdownResult = await pool.query(
-//       "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
-//     );
-//     const countdown =
-//       countdownResult.rows.length > 0
-//         ? countdownResult.rows[0]
-//         : {
-//             target_time: null,
-//             duration: "00:00:00",
-//             countdown_status: "stopped",
-//           };
+router.get("/home", async (req, res) => {
+  try {
+    const countdownResult = await pool.query(
+      "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
+    );
+    const countdown =
+      countdownResult.rows.length > 0
+        ? countdownResult.rows[0]
+        : {
+            target_time: null,
+            duration: "00:00:00",
+            countdown_status: "stopped",
+          };
 
-//     res.render("home", { countdown });
-//   } catch (err) {
-//     console.error(err);
-//     res.render("home", {
-//       countdown: {
-//         target_time: null,
-//         duration: "00:00:00",
-//         countdown_status: "stopped",
-//       },
-//     });
-//   }
-// });
+    res.render("home", { countdown });
+  } catch (err) {
+    console.error(err);
+    res.render("home", {
+      countdown: {
+        target_time: null,
+        duration: "00:00:00",
+        countdown_status: "stopped",
+      },
+    });
+  }
+});
 
-// router.get("/api/countdown", async (req, res) => {
-//   try {
-//     const result = await pool.query(
-//       "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
-//     );
-//     const countdown =
-//       result.rows.length > 0
-//         ? result.rows[0]
-//         : {
-//             target_time: null,
-//             duration: "00:00:00",
-//             countdown_status: "stopped",
-//           };
+router.get("/api/countdown", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT target_time, duration, countdown_status FROM settings ORDER BY id DESC LIMIT 1",
+    );
+    const countdown =
+      result.rows.length > 0
+        ? result.rows[0]
+        : {
+            target_time: null,
+            duration: "00:00:00",
+            countdown_status: "stopped",
+          };
 
-//     res.json(countdown);
-//   } catch (err) {
-//     console.error("Error fetching countdown API:", err);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
+    res.json(countdown);
+  } catch (err) {
+    console.error("Error fetching countdown API:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("/results", renderResultsPage);
 
