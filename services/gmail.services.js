@@ -1,20 +1,8 @@
 const db = require("../config/db");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-// Transporter configured with family: 4 to force IPv4 and prevent ENETUNREACH errors
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587, // Port 587 with STARTTLS avoids network routing issues
-  secure: false, // Set to false for 587
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  family: 4, // Force IPv4 resolution
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-});
+// Initialize Resend HTTP API client (Bypasses Render SMTP port restrictions)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -53,12 +41,12 @@ exports.sendOtpService = async (email) => {
      VALUES ($1, $2, $3)`,
     [cleanEmail, otp, expiresAt],
   );
-  console.log("4. OTP saved. Triggering Nodemailer sendMail...");
+  console.log("4. OTP saved. Triggering Resend API...");
 
-  // Send OTP email
-  await transporter.sendMail({
-    from: `"CodeaSquad Voting System" <${process.env.EMAIL_USER}>`,
-    to: cleanEmail,
+  // Send OTP email via HTTP API
+  const { data, error } = await resend.emails.send({
+    from: "CodeaSquad Voting System <onboarding@resend.dev>", // Replace with your domain once verified on Resend
+    to: [cleanEmail],
     subject: "Voting Verification Code",
     html: `
       <h3>Your OTP Code is <b>${otp}</b></h3>
@@ -66,7 +54,12 @@ exports.sendOtpService = async (email) => {
     `,
   });
 
-  console.log("5. Email sent successfully!");
+  if (error) {
+    console.error("Resend Email Error:", error);
+    throw new Error("Failed to send verification email. Please try again.");
+  }
+
+  console.log("5. Email sent successfully via Resend!");
   return "OTP code sent successfully to your email.";
 };
 
